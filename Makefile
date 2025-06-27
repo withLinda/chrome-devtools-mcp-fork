@@ -9,7 +9,11 @@ help:
 	@echo "Development:"
 	@echo "  install    Install dependencies with uv"
 	@echo "  dev        Install in development mode"
-	@echo "  test       Run test suite"
+	@echo "  test       Run full test suite"
+	@echo "  test-quick Run quick smoke tests"
+	@echo "  test-dom   Run DOM manipulation tests"
+	@echo "  test-console Run console and JavaScript tests"
+	@echo "  test-network Run network monitoring tests"
 	@echo "  lint       Run linting checks"
 	@echo "  format     Format code with ruff"
 	@echo "  check      Run all checks (lint + type check + test)"
@@ -26,7 +30,7 @@ install:
 	uv sync
 
 dev: install
-	uv run mcp install devtools_server.py -n "Chrome DevTools MCP" --with-editable .
+	uv run mcp install server.py -n "Chrome DevTools MCP" --with-editable .
 
 # Code quality
 lint:
@@ -40,10 +44,19 @@ typecheck:
 
 # Testing
 test:
-	uv run python test_devtools_server.py
+	uv run python -m pytest test_devtools_server.py -v
 
-test-individual:
-	uv run python run_tests.py start_and_connect
+test-quick:
+	uv run python -m pytest test_devtools_server.py::test_chrome_detection test_devtools_server.py::test_javascript_execution -v
+
+test-dom:
+	uv run python -m pytest test_devtools_server.py -k "test_get_document or test_query_selector or test_element" -v
+
+test-console:
+	uv run python -m pytest test_devtools_server.py -k "test_javascript or test_console" -v
+
+test-network:
+	uv run python -m pytest test_devtools_server.py -k "test_network" -v
 
 # All checks
 check: lint typecheck test
@@ -74,7 +87,7 @@ install-tools:
 
 # Development server (for testing)
 dev-server:
-	uv run python devtools_server.py
+	uv run python server.py
 
 # Version management
 version-patch:
