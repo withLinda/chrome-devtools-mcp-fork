@@ -39,15 +39,12 @@ Note:
 from __future__ import annotations
 
 import asyncio
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from ..cdp_context import require_cdp_client
 from .utils import create_error_response, create_success_response, safe_timestamp_conversion
-
-if TYPE_CHECKING:
-    from ..main import ChromeDevToolsClient
 
 
 def register_console_tools(mcp: FastMCP) -> None:
@@ -85,7 +82,7 @@ def register_console_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_console_logs(
-        cdp_client: ChromeDevToolsClient, level: str | None = None, limit: int | None = None
+        cdp_client: Any, level: str | None = None, limit: int | None = None
     ) -> dict[str, Any]:
         """
         Get browser console logs with optional filtering.
@@ -125,7 +122,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_console_error_summary(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
+    async def get_console_error_summary(cdp_client: Any) -> dict[str, Any]:
         """
         Get an organised summary of console errors and warnings.
 
@@ -175,7 +172,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def execute_javascript(cdp_client: ChromeDevToolsClient, code: str) -> dict[str, Any]:
+    async def execute_javascript(cdp_client: Any, code: str) -> dict[str, Any]:
         """
         Execute JavaScript code in the browser context.
 
@@ -214,7 +211,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def clear_console(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
+    async def clear_console(cdp_client: Any) -> dict[str, Any]:
         """
         Clear the browser console.
 
@@ -236,7 +233,7 @@ def register_console_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def inspect_console_object(
-        cdp_client: ChromeDevToolsClient, expression: str
+        cdp_client: Any, expression: str
     ) -> dict[str, Any]:
         """
         Inspect a JavaScript object or expression in detail.
@@ -301,7 +298,7 @@ def register_console_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def monitor_console_live(
-        cdp_client: ChromeDevToolsClient, duration_seconds: int = 10
+        cdp_client: Any, duration_seconds: int = 10
     ) -> dict[str, Any]:
         """
         Monitor console output in real-time for a specified duration.

@@ -35,16 +35,13 @@ import asyncio
 import os
 import platform
 import subprocess
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import aiohttp
 from mcp.server.fastmcp import FastMCP
 
 from ..cdp_context import require_cdp_client
 from .utils import create_error_response, create_success_response
-
-if TYPE_CHECKING:
-    from ..main import ChromeDevToolsClient
 
 
 def get_chrome_executable_path(custom_path: str | None = None) -> str | None:
@@ -449,7 +446,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def navigate_to_url(cdp_client: ChromeDevToolsClient, url: str) -> dict[str, Any]:
+    async def navigate_to_url(cdp_client: Any, url: str) -> dict[str, Any]:
         """Navigate the connected browser to a specific URL.
 
         Instructs the currently connected Chrome instance to navigate to the specified

@@ -35,15 +35,12 @@ Example:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from ..cdp_context import require_cdp_client
 from .utils import create_error_response, create_success_response
-
-if TYPE_CHECKING:
-    from ..main import ChromeDevToolsClient
 
 
 def register_storage_tools(mcp: FastMCP) -> None:
@@ -52,7 +49,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_storage_usage_and_quota(
-        cdp_client: ChromeDevToolsClient, origin: str
+        cdp_client: Any, origin: str
     ) -> dict[str, Any]:
         """
         Get storage usage and quota information for an origin.
@@ -99,7 +96,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def clear_storage_for_origin(
-        cdp_client: ChromeDevToolsClient, origin: str, storage_types: str = "all"
+        cdp_client: Any, origin: str, storage_types: str = "all"
     ) -> dict[str, Any]:
         """
         Clear storage data for a specific origin.
@@ -127,7 +124,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_all_cookies(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
+    async def get_all_cookies(cdp_client: Any) -> dict[str, Any]:
         """
         Get all browser cookies.
 
@@ -177,7 +174,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def clear_all_cookies(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
+    async def clear_all_cookies(cdp_client: Any) -> dict[str, Any]:
         """
         Clear all browser cookies.
 
@@ -197,7 +194,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def set_cookie(
-        cdp_client: ChromeDevToolsClient,
+        cdp_client: Any,
         name: str,
         value: str,
         domain: str,
@@ -250,7 +247,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_storage_key_for_frame(
-        cdp_client: ChromeDevToolsClient, frame_id: str
+        cdp_client: Any, frame_id: str
     ) -> dict[str, Any]:
         """
         Get the storage key for a specific frame.
@@ -277,7 +274,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def track_cache_storage(
-        cdp_client: ChromeDevToolsClient, origin: str, enable: bool = True
+        cdp_client: Any, origin: str, enable: bool = True
     ) -> dict[str, Any]:
         """
         Enable or disable cache storage tracking for an origin.
@@ -312,7 +309,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def track_indexeddb(
-        cdp_client: ChromeDevToolsClient, origin: str, enable: bool = True
+        cdp_client: Any, origin: str, enable: bool = True
     ) -> dict[str, Any]:
         """
         Enable or disable IndexedDB tracking for an origin.
@@ -345,7 +342,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def override_storage_quota(
-        cdp_client: ChromeDevToolsClient, origin: str, quota_size_mb: float | None = None
+        cdp_client: Any, origin: str, quota_size_mb: float | None = None
     ) -> dict[str, Any]:
         """
         Override storage quota for a specific origin.

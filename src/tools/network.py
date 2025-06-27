@@ -31,15 +31,12 @@ Example:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from ..cdp_context import require_cdp_client
 from .utils import create_error_response, create_success_response, safe_timestamp_conversion
-
-if TYPE_CHECKING:
-    from ..main import ChromeDevToolsClient
 
 
 def register_network_tools(mcp: FastMCP) -> None:
@@ -48,7 +45,7 @@ def register_network_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_network_requests(
-        cdp_client: ChromeDevToolsClient,
+        cdp_client: Any,
         filter_domain: str | None = None,
         filter_status: int | None = None,
         limit: int | None = None,
@@ -106,7 +103,7 @@ def register_network_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_network_response(
-        cdp_client: ChromeDevToolsClient, request_id: str
+        cdp_client: Any, request_id: str
     ) -> dict[str, Any]:
         """
         Get detailed response data for a specific network request.

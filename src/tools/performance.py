@@ -34,15 +34,12 @@ Example:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from ..cdp_context import require_cdp_client
 from .utils import create_error_response, create_success_response
-
-if TYPE_CHECKING:
-    from ..main import ChromeDevToolsClient
 
 
 def register_performance_tools(mcp: FastMCP) -> None:
@@ -50,7 +47,7 @@ def register_performance_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_page_info(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
+    async def get_page_info(cdp_client: Any) -> dict[str, Any]:
         """
         Get comprehensive information about the current page.
 
@@ -161,7 +158,7 @@ def register_performance_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_performance_metrics(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
+    async def get_performance_metrics(cdp_client: Any) -> dict[str, Any]:
         """
         Get detailed performance metrics and resource timing.
 
@@ -259,7 +256,7 @@ def register_performance_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_cookies(
-        cdp_client: ChromeDevToolsClient, domain: str | None = None
+        cdp_client: Any, domain: str | None = None
     ) -> dict[str, Any]:
         """
         Get browser cookies with optional domain filtering.
@@ -316,7 +313,7 @@ def register_performance_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def evaluate_in_all_frames(cdp_client: ChromeDevToolsClient, code: str) -> dict[str, Any]:
+    async def evaluate_in_all_frames(cdp_client: Any, code: str) -> dict[str, Any]:
         """
         Execute JavaScript code in all frames/iframes of the page.
 

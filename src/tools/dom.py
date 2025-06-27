@@ -44,15 +44,12 @@ Note:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from ..cdp_context import require_cdp_client
 from .utils import create_error_response, create_success_response
-
-if TYPE_CHECKING:
-    from ..main import ChromeDevToolsClient
 
 
 def register_dom_tools(mcp: FastMCP) -> None:
@@ -95,7 +92,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_document(
-        cdp_client: ChromeDevToolsClient, depth: int = 1, pierce: bool = False
+        cdp_client: Any, depth: int = 1, pierce: bool = False
     ) -> dict[str, Any]:
         """Retrieve the DOM document structure with configurable depth and shadow DOM access.
 
@@ -141,7 +138,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def query_selector(
-        cdp_client: ChromeDevToolsClient, node_id: int, selector: str
+        cdp_client: Any, node_id: int, selector: str
     ) -> dict[str, Any]:
         """
         Execute querySelector on a DOM node.
@@ -175,7 +172,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def query_selector_all(
-        cdp_client: ChromeDevToolsClient, node_id: int, selector: str
+        cdp_client: Any, node_id: int, selector: str
     ) -> dict[str, Any]:
         """
         Execute querySelectorAll on a DOM node.
@@ -203,7 +200,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_element_attributes(
-        cdp_client: ChromeDevToolsClient, node_id: int
+        cdp_client: Any, node_id: int
     ) -> dict[str, Any]:
         """
         Get all attributes of a DOM element.
@@ -234,7 +231,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_element_outer_html(
-        cdp_client: ChromeDevToolsClient, node_id: int
+        cdp_client: Any, node_id: int
     ) -> dict[str, Any]:
         """
         Get the outer HTML of a DOM element.
@@ -263,7 +260,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_element_box_model(
-        cdp_client: ChromeDevToolsClient, node_id: int
+        cdp_client: Any, node_id: int
     ) -> dict[str, Any]:
         """
         Get the box model (layout information) of a DOM element.
@@ -297,7 +294,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def describe_element(
-        cdp_client: ChromeDevToolsClient, node_id: int, depth: int = 1
+        cdp_client: Any, node_id: int, depth: int = 1
     ) -> dict[str, Any]:
         """
         Get detailed information about a DOM element.
@@ -335,7 +332,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_element_at_position(
-        cdp_client: ChromeDevToolsClient, x: int, y: int
+        cdp_client: Any, x: int, y: int
     ) -> dict[str, Any]:
         """
         Get the DOM element at a specific screen position.
@@ -365,7 +362,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def search_elements(cdp_client: ChromeDevToolsClient, query: str) -> dict[str, Any]:
+    async def search_elements(cdp_client: Any, query: str) -> dict[str, Any]:
         """
         Search for DOM elements matching a query string.
 
@@ -412,7 +409,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def focus_element(cdp_client: ChromeDevToolsClient, node_id: int) -> dict[str, Any]:
+    async def focus_element(cdp_client: Any, node_id: int) -> dict[str, Any]:
         """
         Focus a DOM element.
 
