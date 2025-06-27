@@ -67,8 +67,9 @@ ci-test: install check
 # Packaging
 package: clean
 	@echo "Building DXT extension package..."
-	npx @anthropic-ai/dxt pack
-	@echo "✅ Extension packaged: chrome-devtools-protocol-*.dxt"
+	@VERSION=$$(jq -r '.version' manifest.json) && \
+	npx @anthropic-ai/dxt pack . chrome-devtools-protocol-$$VERSION.dxt && \
+	echo "✅ Extension packaged: chrome-devtools-protocol-$$VERSION.dxt"
 
 # Cleanup
 clean:

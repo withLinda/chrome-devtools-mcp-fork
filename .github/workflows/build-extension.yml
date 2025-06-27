@@ -73,7 +73,9 @@ jobs:
       run: npm install -g @anthropic-ai/dxt
       
     - name: Package extension for release
-      run: npx @anthropic-ai/dxt pack
+      run: |
+        VERSION=$(jq -r '.version' manifest.json)
+        npx @anthropic-ai/dxt pack . chrome-devtools-protocol-${VERSION}.dxt
       
     - name: Create Release
       uses: softprops/action-gh-release@v1
@@ -83,7 +85,7 @@ jobs:
         prerelease: false
         generate_release_notes: true
         body: |
-          ## Chrome DevTools Protocol Extension v${{ github.ref_name }}
+          ## Chrome DevTools Protocol Extension ${{ github.ref_name }}
           
           ### Installation
           1. Download the `.dxt` file from this release
