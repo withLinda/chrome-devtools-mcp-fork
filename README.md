@@ -654,10 +654,23 @@ npx @anthropic-ai/dxt pack
 ```bash
 make help           # Show all commands
 make install        # Install dependencies
+make dev            # Setup development environment + pre-commit
 make check          # Run all checks (lint + type + test)
+make pre-commit     # Run pre-commit hooks manually
 make package        # Build .dxt extension
 make release        # Full release build
 ```
+
+### Pre-commit Hooks
+
+This project uses pre-commit hooks to ensure code quality:
+
+- **ruff**: Linting and formatting
+- **mypy**: Type checking  
+- **pytest**: Test validation
+- **MCP validation**: Server registration check
+
+Pre-commit hooks run automatically on `git commit` and can be run manually with `make pre-commit`.
 
 ## License
 

@@ -91,9 +91,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_document(
-        cdp_client: Any, depth: int = 1, pierce: bool = False
-    ) -> dict[str, Any]:
+    async def get_document(depth: int = 1, pierce: bool = False, **kwargs: Any) -> dict[str, Any]:
         """Retrieve the DOM document structure with configurable depth and shadow DOM access.
 
         Fetches the document tree starting from the root element, with control over
@@ -124,6 +122,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             specific areas for detailed analysis.
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "DOM.getDocument", {"depth": depth, "pierce": pierce}
             )
@@ -137,9 +136,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def query_selector(
-        cdp_client: Any, node_id: int, selector: str
-    ) -> dict[str, Any]:
+    async def query_selector(node_id: int, selector: str, **kwargs: Any) -> dict[str, Any]:
         """
         Execute querySelector on a DOM node.
 
@@ -151,6 +148,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Node ID of the matching element
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "DOM.querySelector", {"nodeId": node_id, "selector": selector}
             )
@@ -171,9 +169,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def query_selector_all(
-        cdp_client: Any, node_id: int, selector: str
-    ) -> dict[str, Any]:
+    async def query_selector_all(node_id: int, selector: str, **kwargs: Any) -> dict[str, Any]:
         """
         Execute querySelectorAll on a DOM node.
 
@@ -185,6 +181,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Array of node IDs matching the selector
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "DOM.querySelectorAll", {"nodeId": node_id, "selector": selector}
             )
@@ -199,9 +196,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_element_attributes(
-        cdp_client: Any, node_id: int
-    ) -> dict[str, Any]:
+    async def get_element_attributes(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get all attributes of a DOM element.
 
@@ -212,6 +207,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Dictionary of element attributes
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("DOM.getAttributes", {"nodeId": node_id})
 
             attributes = {}
@@ -230,9 +226,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_element_outer_html(
-        cdp_client: Any, node_id: int
-    ) -> dict[str, Any]:
+    async def get_element_outer_html(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get the outer HTML of a DOM element.
 
@@ -243,6 +237,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Outer HTML string of the element
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("DOM.getOuterHTML", {"nodeId": node_id})
 
             return create_success_response(
@@ -259,9 +254,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_element_box_model(
-        cdp_client: Any, node_id: int
-    ) -> dict[str, Any]:
+    async def get_element_box_model(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get the box model (layout information) of a DOM element.
 
@@ -272,6 +265,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Box model data including content, padding, border, and margin boxes
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("DOM.getBoxModel", {"nodeId": node_id})
 
             model = result["model"]
@@ -293,9 +287,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def describe_element(
-        cdp_client: Any, node_id: int, depth: int = 1
-    ) -> dict[str, Any]:
+    async def describe_element(node_id: int, depth: int = 1, **kwargs: Any) -> dict[str, Any]:
         """
         Get detailed information about a DOM element.
 
@@ -307,6 +299,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Detailed element description including tag, attributes, and children
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "DOM.describeNode", {"nodeId": node_id, "depth": depth}
             )
@@ -331,9 +324,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_element_at_position(
-        cdp_client: Any, x: int, y: int
-    ) -> dict[str, Any]:
+    async def get_element_at_position(x: int, y: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get the DOM element at a specific screen position.
 
@@ -345,6 +336,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Node information at the specified position
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("DOM.getNodeForLocation", {"x": x, "y": y})
 
             return create_success_response(
@@ -362,7 +354,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def search_elements(cdp_client: Any, query: str) -> dict[str, Any]:
+    async def search_elements(query: str, **kwargs: Any) -> dict[str, Any]:
         """
         Search for DOM elements matching a query string.
 
@@ -373,6 +365,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Search results with matching elements
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             search_result = await cdp_client.send_command(
                 "DOM.performSearch", {"query": query, "includeUserAgentShadowDOM": False}
             )
@@ -409,7 +402,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def focus_element(cdp_client: Any, node_id: int) -> dict[str, Any]:
+    async def focus_element(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Focus a DOM element.
 
@@ -420,6 +413,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             Success status of the focus operation
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             await cdp_client.send_command("DOM.focus", {"nodeId": node_id})
 
             return create_success_response(

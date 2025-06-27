@@ -82,7 +82,7 @@ def register_console_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_console_logs(
-        cdp_client: Any, level: str | None = None, limit: int | None = None
+        level: str | None = None, limit: int | None = None, **kwargs: Any
     ) -> dict[str, Any]:
         """
         Get browser console logs with optional filtering.
@@ -95,6 +95,7 @@ def register_console_tools(mcp: FastMCP) -> None:
             List of console logs matching the criteria
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             logs = cdp_client.console_logs.copy()
 
             if level:
@@ -122,7 +123,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_console_error_summary(cdp_client: Any) -> dict[str, Any]:
+    async def get_console_error_summary(**kwargs: Any) -> dict[str, Any]:
         """
         Get an organised summary of console errors and warnings.
 
@@ -130,6 +131,7 @@ def register_console_tools(mcp: FastMCP) -> None:
             Categorised summary of console errors and warnings
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             logs = cdp_client.console_logs
 
             errors = [log for log in logs if log.get("type") == "error"]
@@ -172,7 +174,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def execute_javascript(cdp_client: Any, code: str) -> dict[str, Any]:
+    async def execute_javascript(code: str, **kwargs: Any) -> dict[str, Any]:
         """
         Execute JavaScript code in the browser context.
 
@@ -183,6 +185,7 @@ def register_console_tools(mcp: FastMCP) -> None:
             Result of the JavaScript execution
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "Runtime.evaluate",
                 {"expression": code, "returnByValue": True, "awaitPromise": True},
@@ -211,7 +214,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def clear_console(cdp_client: Any) -> dict[str, Any]:
+    async def clear_console(**kwargs: Any) -> dict[str, Any]:
         """
         Clear the browser console.
 
@@ -219,6 +222,7 @@ def register_console_tools(mcp: FastMCP) -> None:
             Status of the clear operation
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             await cdp_client.send_command("Runtime.discardConsoleEntries")
 
             cdp_client.console_logs.clear()
@@ -232,9 +236,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def inspect_console_object(
-        cdp_client: Any, expression: str
-    ) -> dict[str, Any]:
+    async def inspect_console_object(expression: str, **kwargs: Any) -> dict[str, Any]:
         """
         Inspect a JavaScript object or expression in detail.
 
@@ -245,6 +247,7 @@ def register_console_tools(mcp: FastMCP) -> None:
             Detailed object inspection results
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "Runtime.evaluate", {"expression": expression, "returnByValue": False}
             )
@@ -297,9 +300,7 @@ def register_console_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def monitor_console_live(
-        cdp_client: Any, duration_seconds: int = 10
-    ) -> dict[str, Any]:
+    async def monitor_console_live(duration_seconds: int = 10, **kwargs: Any) -> dict[str, Any]:
         """
         Monitor console output in real-time for a specified duration.
 
@@ -310,6 +311,7 @@ def register_console_tools(mcp: FastMCP) -> None:
             Console messages captured during monitoring period
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             initial_count = len(cdp_client.console_logs)
 
             await asyncio.sleep(duration_seconds)

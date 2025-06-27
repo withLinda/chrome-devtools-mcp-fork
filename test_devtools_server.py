@@ -13,6 +13,8 @@ import os
 import platform
 import subprocess
 import sys
+from collections.abc import AsyncGenerator
+from typing import Any
 
 import pytest
 import pytest_asyncio
@@ -57,7 +59,7 @@ def get_chrome_path() -> str | None:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def chrome_setup():
+async def chrome_setup() -> AsyncGenerator[dict[str, Any], None]:
     """Set up Chrome instance for testing."""
     test_port = 9223
     chrome_path = get_chrome_path()
@@ -68,7 +70,7 @@ async def chrome_setup():
     logger.info("Setting up test environment...")
 
     cmd = [
-        chrome_path,
+        str(chrome_path),
         f"--remote-debugging-port={test_port}",
         "--headless=new",
         "--disable-gpu",
@@ -81,7 +83,7 @@ async def chrome_setup():
     await asyncio.sleep(3)
     logger.info(f"Chrome started for testing on port {test_port}")
 
-    yield test_port
+    yield {"port": test_port}
 
     # Cleanup
     logger.info("Cleaning up test environment...")
@@ -91,9 +93,9 @@ async def chrome_setup():
 
 
 @pytest_asyncio.fixture
-async def cdp_client(chrome_setup):
+async def cdp_client(chrome_setup: dict[str, Any]) -> AsyncGenerator[ChromeDevToolsClient, None]:
     """Create and connect CDP client."""
-    test_port = chrome_setup
+    test_port = chrome_setup["port"]
     client = ChromeDevToolsClient(port=test_port)
 
     connected = await client.connect()
@@ -108,7 +110,7 @@ async def cdp_client(chrome_setup):
     await client.disconnect()
 
 
-async def setup_test_page(cdp_client: ChromeDevToolsClient):
+async def setup_test_page(cdp_client: ChromeDevToolsClient) -> None:
     """Set up a test page with elements for testing."""
     html = """
     <html>
@@ -125,7 +127,7 @@ async def setup_test_page(cdp_client: ChromeDevToolsClient):
 
 
 @pytest.mark.asyncio
-async def test_chrome_detection():
+async def test_chrome_detection() -> None:
     """Test Chrome detection and startup."""
     chrome_path = get_chrome_path()
     assert chrome_path is not None, "Chrome executable not found"
@@ -133,7 +135,7 @@ async def test_chrome_detection():
 
 
 @pytest.mark.asyncio
-async def test_connection_status(cdp_client):
+async def test_connection_status(cdp_client: ChromeDevToolsClient) -> None:
     """Test CDP connection status."""
     assert cdp_client.connected, "CDP client should be connected"
 
@@ -142,7 +144,7 @@ async def test_connection_status(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_navigation(cdp_client):
+async def test_navigation(cdp_client: ChromeDevToolsClient) -> None:
     """Test page navigation."""
     await cdp_client.send_command(
         "Page.navigate",
@@ -152,7 +154,7 @@ async def test_navigation(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_get_document(cdp_client):
+async def test_get_document(cdp_client: ChromeDevToolsClient) -> None:
     """Test document retrieval."""
     await setup_test_page(cdp_client)
 
@@ -162,7 +164,7 @@ async def test_get_document(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_query_selector(cdp_client):
+async def test_query_selector(cdp_client: ChromeDevToolsClient) -> None:
     """Test CSS selector querying."""
     await setup_test_page(cdp_client)
 
@@ -177,7 +179,7 @@ async def test_query_selector(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_element_attributes(cdp_client):
+async def test_element_attributes(cdp_client: ChromeDevToolsClient) -> None:
     """Test element attribute retrieval."""
     await setup_test_page(cdp_client)
 
@@ -196,7 +198,7 @@ async def test_element_attributes(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_element_outer_html(cdp_client):
+async def test_element_outer_html(cdp_client: ChromeDevToolsClient) -> None:
     """Test element HTML retrieval."""
     await setup_test_page(cdp_client)
 
@@ -216,7 +218,7 @@ async def test_element_outer_html(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_computed_styles(cdp_client):
+async def test_computed_styles(cdp_client: ChromeDevToolsClient) -> None:
     """Test computed style retrieval."""
     await setup_test_page(cdp_client)
 
@@ -235,7 +237,7 @@ async def test_computed_styles(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_javascript_execution(cdp_client):
+async def test_javascript_execution(cdp_client: ChromeDevToolsClient) -> None:
     """Test JavaScript code execution."""
     result = await cdp_client.send_command(
         "Runtime.evaluate", {"expression": "2 + 2", "returnByValue": True}
@@ -246,7 +248,7 @@ async def test_javascript_execution(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_console_logs(cdp_client):
+async def test_console_logs(cdp_client: ChromeDevToolsClient) -> None:
     """Test console log capture."""
     await cdp_client.send_command(
         "Runtime.evaluate",
@@ -258,7 +260,7 @@ async def test_console_logs(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_network_monitoring(cdp_client):
+async def test_network_monitoring(cdp_client: ChromeDevToolsClient) -> None:
     """Test network request monitoring."""
     initial_requests = len(cdp_client.network_requests)
 
@@ -279,7 +281,7 @@ async def test_network_monitoring(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_performance_metrics(cdp_client):
+async def test_performance_metrics(cdp_client: ChromeDevToolsClient) -> None:
     """Test performance metrics collection."""
     await cdp_client.send_command("Performance.enable")
     metrics_result = await cdp_client.send_command("Performance.getMetrics")
@@ -289,7 +291,7 @@ async def test_performance_metrics(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_page_info(cdp_client):
+async def test_page_info(cdp_client: ChromeDevToolsClient) -> None:
     """Test page information retrieval."""
     await setup_test_page(cdp_client)
 
@@ -311,18 +313,15 @@ async def test_page_info(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_storage_operations(cdp_client):
+async def test_storage_operations(cdp_client: ChromeDevToolsClient) -> None:
     """Test storage operations."""
     try:
         # Test storage quota check
-        await cdp_client.send_command(
-            "Storage.getUsageAndQuota", {"origin": "http://localhost"}
-        )
+        await cdp_client.send_command("Storage.getUsageAndQuota", {"origin": "http://localhost"})
 
         # Test storage clearing
         await cdp_client.send_command(
-            "Storage.clearDataForOrigin",
-            {"origin": "http://localhost", "storageTypes": "cookies"}
+            "Storage.clearDataForOrigin", {"origin": "http://localhost", "storageTypes": "cookies"}
         )
 
     except Exception:
@@ -332,7 +331,7 @@ async def test_storage_operations(cdp_client):
 
 # Test for CSS operations
 @pytest.mark.asyncio
-async def test_css_media_queries(cdp_client):
+async def test_css_media_queries(cdp_client: ChromeDevToolsClient) -> None:
     """Test CSS media queries retrieval."""
     try:
         result = await cdp_client.send_command("CSS.getMediaQueries")
@@ -343,7 +342,7 @@ async def test_css_media_queries(cdp_client):
 
 
 @pytest.mark.asyncio
-async def test_search_elements(cdp_client):
+async def test_search_elements(cdp_client: ChromeDevToolsClient) -> None:
     """Test element searching."""
     await setup_test_page(cdp_client)
 
@@ -358,7 +357,7 @@ async def test_search_elements(cdp_client):
         if result_count > 0:
             results = await cdp_client.send_command(
                 "DOM.getSearchResults",
-                {"searchId": search_id, "fromIndex": 0, "toIndex": min(result_count, 10)}
+                {"searchId": search_id, "fromIndex": 0, "toIndex": min(result_count, 10)},
             )
             assert "nodeIds" in results, "Should return search results"
 
@@ -368,4 +367,3 @@ async def test_search_elements(cdp_client):
     except Exception:
         # DOM search may not be fully available in all Chrome versions
         pytest.skip("DOM search not fully available in test environment")
-

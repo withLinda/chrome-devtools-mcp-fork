@@ -45,11 +45,11 @@ def require_cdp_client(func: F) -> Callable[..., Awaitable[Any]]:
 
     1. Imports the CDP client from the main module
     2. Validates that the client exists and is connected
-    3. Passes the validated client as the first parameter to the decorated function
+    3. Injects the validated client into kwargs as 'cdp_client'
     4. Returns appropriate error responses if client is unavailable
 
     Args:
-        func: The async function to decorate. Must accept cdp_client as first parameter.
+        func: The async function to decorate. Can access cdp_client from kwargs.
 
     Returns:
         The decorated function with automatic CDP client injection.
@@ -57,7 +57,8 @@ def require_cdp_client(func: F) -> Callable[..., Awaitable[Any]]:
     Example:
         ```python
         @require_cdp_client
-        async def get_page_title(cdp_client, **kwargs):
+        async def get_page_title(**kwargs):
+            cdp_client = kwargs['cdp_client']
             result = await cdp_client.send_command("Runtime.evaluate", {
                 "expression": "document.title",
                 "returnByValue": True
@@ -85,8 +86,11 @@ def require_cdp_client(func: F) -> Callable[..., Awaitable[Any]]:
                     "Not connected to browser. Please connect to Chrome first."
                 )
 
-            # Call the original function with CDP client as first argument
-            return await func(cdp_client, *args, **kwargs)
+            # Inject CDP client into kwargs
+            kwargs["cdp_client"] = cdp_client
+
+            # Call the original function with CDP client available in kwargs
+            return await func(*args, **kwargs)
 
         except ImportError:
             return create_error_response(
@@ -176,6 +180,7 @@ def get_cdp_client() -> Any:
     """
     try:
         from . import main
+
         return main.cdp_client
     except ImportError:
         return None

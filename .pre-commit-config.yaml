@@ -1,0 +1,45 @@
+repos:
+  # Ruff linting and formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      # Run the linter
+      - id: ruff
+        args: [--fix]
+        types_or: [python, pyi]
+      # Run the formatter
+      - id: ruff-format
+        types_or: [python, pyi]
+
+  # MyPy type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies: 
+          - mcp
+          - fastmcp
+          - websockets
+          - types-requests
+        args: [--ignore-missing-imports]
+
+  # Local hooks for tests and validation
+  - repo: local
+    hooks:
+      # Run tests
+      - id: pytest
+        name: Run tests
+        entry: uv run python -m pytest test_devtools_server.py -v
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      # Validate MCP server registration
+      - id: mcp-validation
+        name: Validate MCP server
+        entry: uv run python test_devtools_server.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

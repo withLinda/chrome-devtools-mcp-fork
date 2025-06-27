@@ -48,9 +48,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_storage_usage_and_quota(
-        cdp_client: Any, origin: str
-    ) -> dict[str, Any]:
+    async def get_storage_usage_and_quota(origin: str, **kwargs: Any) -> dict[str, Any]:
         """
         Get storage usage and quota information for an origin.
 
@@ -61,6 +59,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Storage usage and quota information in bytes
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("Storage.getUsageAndQuota", {"origin": origin})
 
             usage_breakdown = {}
@@ -96,7 +95,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def clear_storage_for_origin(
-        cdp_client: Any, origin: str, storage_types: str = "all"
+        origin: str, storage_types: str = "all", **kwargs: Any
     ) -> dict[str, Any]:
         """
         Clear storage data for a specific origin.
@@ -110,6 +109,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Success status of the clear operation
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             await cdp_client.send_command(
                 "Storage.clearDataForOrigin", {"origin": origin, "storageTypes": storage_types}
             )
@@ -124,7 +124,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_all_cookies(cdp_client: Any) -> dict[str, Any]:
+    async def get_all_cookies(**kwargs: Any) -> dict[str, Any]:
         """
         Get all browser cookies.
 
@@ -132,6 +132,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             List of all cookies with details
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("Storage.getCookies")
 
             cookies = result.get("cookies", [])
@@ -174,7 +175,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def clear_all_cookies(cdp_client: Any) -> dict[str, Any]:
+    async def clear_all_cookies(**kwargs: Any) -> dict[str, Any]:
         """
         Clear all browser cookies.
 
@@ -182,6 +183,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Success status of the clear operation
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             await cdp_client.send_command("Storage.clearCookies")
 
             return create_success_response(
@@ -194,7 +196,6 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def set_cookie(
-        cdp_client: Any,
         name: str,
         value: str,
         domain: str,
@@ -203,6 +204,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
         http_only: bool = False,
         secure: bool = False,
         same_site: str = "Lax",
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """
         Set a browser cookie.
@@ -221,6 +223,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Success status of the set operation
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             cookie_data = {
                 "name": name,
                 "value": value,
@@ -246,9 +249,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_storage_key_for_frame(
-        cdp_client: Any, frame_id: str
-    ) -> dict[str, Any]:
+    async def get_storage_key_for_frame(frame_id: str, **kwargs: Any) -> dict[str, Any]:
         """
         Get the storage key for a specific frame.
 
@@ -259,6 +260,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Storage key for the frame
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "Storage.getStorageKeyForFrame", {"frameId": frame_id}
             )
@@ -274,7 +276,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def track_cache_storage(
-        cdp_client: Any, origin: str, enable: bool = True
+        origin: str, enable: bool = True, **kwargs: Any
     ) -> dict[str, Any]:
         """
         Enable or disable cache storage tracking for an origin.
@@ -287,6 +289,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Tracking status
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             if enable:
                 await cdp_client.send_command(
                     "Storage.trackCacheStorageForOrigin", {"origin": origin}
@@ -308,9 +311,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def track_indexeddb(
-        cdp_client: Any, origin: str, enable: bool = True
-    ) -> dict[str, Any]:
+    async def track_indexeddb(origin: str, enable: bool = True, **kwargs: Any) -> dict[str, Any]:
         """
         Enable or disable IndexedDB tracking for an origin.
 
@@ -322,6 +323,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Tracking status
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             if enable:
                 await cdp_client.send_command("Storage.trackIndexedDBForOrigin", {"origin": origin})
                 message = f"Started tracking IndexedDB for origin: {origin}"
@@ -342,7 +344,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def override_storage_quota(
-        cdp_client: Any, origin: str, quota_size_mb: float | None = None
+        origin: str, quota_size_mb: float | None = None, **kwargs: Any
     ) -> dict[str, Any]:
         """
         Override storage quota for a specific origin.
@@ -355,6 +357,7 @@ def register_storage_tools(mcp: FastMCP) -> None:
             Quota override status
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             params: dict[str, Any] = {"origin": origin}
             if quota_size_mb is not None:
                 params["quotaSize"] = int(quota_size_mb * 1024 * 1024)

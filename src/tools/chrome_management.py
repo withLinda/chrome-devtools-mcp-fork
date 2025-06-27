@@ -133,7 +133,7 @@ async def check_chrome_running(port: int) -> bool:
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(f"http://localhost:{port}/json/version", timeout=2) as response:
-                return response.status == 200
+                return bool(response.status == 200)
     except Exception:
         return False
 
@@ -175,6 +175,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         headless: bool = False,
         chrome_path: str | None = None,
         auto_connect: bool = False,
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Start Chrome with remote debugging enabled and optionally establish connection.
 
@@ -349,7 +350,11 @@ def register_chrome_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     async def start_chrome_and_connect(
-        url: str, port: int = 9222, headless: bool = False, chrome_path: str | None = None
+        url: str,
+        port: int = 9222,
+        headless: bool = False,
+        chrome_path: str | None = None,
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Start Chrome with debugging, connect, and navigate to URL in one step.
 
@@ -446,7 +451,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def navigate_to_url(cdp_client: Any, url: str) -> dict[str, Any]:
+    async def navigate_to_url(url: str, **kwargs: Any) -> dict[str, Any]:
         """Navigate the connected browser to a specific URL.
 
         Instructs the currently connected Chrome instance to navigate to the specified
@@ -472,6 +477,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
             load completion if needed.
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             await cdp_client.send_command("Page.navigate", {"url": url})
             await asyncio.sleep(1)
 
@@ -483,7 +489,8 @@ def register_chrome_tools(mcp: FastMCP) -> None:
             return create_error_response(f"Navigation error: {e}")
 
     @mcp.tool()
-    async def disconnect_from_browser() -> dict[str, Any]:
+    @require_cdp_client
+    async def disconnect_from_browser(**kwargs: Any) -> dict[str, Any]:
         """Disconnect from the current browser session.
 
         Cleanly terminates the connection to the Chrome browser instance while
@@ -504,14 +511,8 @@ def register_chrome_tools(mcp: FastMCP) -> None:
             This function only disconnects the client from Chrome; it doesn't
             close or terminate the browser process itself.
         """
-        from .. import main
-
-        cdp_client = main.cdp_client
-
-        if not cdp_client:
-            return create_error_response("CDP client not initialised")
-
         try:
+            cdp_client = kwargs["cdp_client"]
             await cdp_client.disconnect()
             return create_success_response(
                 message="Disconnected from browser", data={"connected": False}
@@ -521,7 +522,8 @@ def register_chrome_tools(mcp: FastMCP) -> None:
             return create_error_response(f"Disconnection error: {e}")
 
     @mcp.tool()
-    async def get_connection_status() -> dict[str, Any]:
+    @require_cdp_client
+    async def get_connection_status(**kwargs: Any) -> dict[str, Any]:
         """Get the current connection status to the browser.
 
         Retrieves comprehensive information about the current connection state,
@@ -548,17 +550,8 @@ def register_chrome_tools(mcp: FastMCP) -> None:
             This function is safe to call at any time and will not modify the
             connection state, only report it.
         """
-        from .. import main
-
-        cdp_client = main.cdp_client
-
-        if not cdp_client:
-            return create_success_response(
-                message="CDP client not initialised",
-                data={"connected": False, "status": "not_initialised"},
-            )
-
         try:
+            cdp_client = kwargs["cdp_client"]
             if cdp_client.connected:
                 target_info = await cdp_client.get_target_info()
                 return create_success_response(

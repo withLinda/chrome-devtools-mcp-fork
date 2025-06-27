@@ -1,6 +1,6 @@
 # Chrome DevTools MCP - Build Automation
 
-.PHONY: install test lint format clean build package check dev help
+.PHONY: install test lint format clean build package check dev help pre-commit
 
 # Default target
 help:
@@ -17,6 +17,7 @@ help:
 	@echo "  lint       Run linting checks"
 	@echo "  format     Format code with ruff"
 	@echo "  check      Run all checks (lint + type check + test)"
+	@echo "  pre-commit Run pre-commit hooks"
 	@echo ""
 	@echo "Distribution:"
 	@echo "  package    Build DXT extension package"
@@ -29,7 +30,7 @@ help:
 install:
 	uv sync
 
-dev: install
+dev: install install-pre-commit
 	uv run mcp install server.py -n "Chrome DevTools MCP" --with-editable .
 
 # Code quality
@@ -41,6 +42,13 @@ format:
 
 typecheck:
 	uv run mypy src/
+
+# Pre-commit hooks
+pre-commit:
+	uv run pre-commit run --all-files
+
+install-pre-commit:
+	uv run pre-commit install
 
 # Testing
 test:
@@ -58,8 +66,8 @@ test-console:
 test-network:
 	uv run python -m pytest test_devtools_server.py -k "test_network" -v
 
-# All checks
-check: lint typecheck test
+# All checks  
+check: pre-commit
 
 # CI test suite
 ci-test: install check

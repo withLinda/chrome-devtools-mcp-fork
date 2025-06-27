@@ -45,10 +45,10 @@ def register_network_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_network_requests(
-        cdp_client: Any,
         filter_domain: str | None = None,
         filter_status: int | None = None,
         limit: int | None = None,
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """
         Get captured network requests with optional filtering.
@@ -62,6 +62,7 @@ def register_network_tools(mcp: FastMCP) -> None:
             List of network requests matching the criteria
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             requests = cdp_client.network_requests.copy()
 
             if filter_domain:
@@ -102,9 +103,7 @@ def register_network_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_network_response(
-        cdp_client: Any, request_id: str
-    ) -> dict[str, Any]:
+    async def get_network_response(request_id: str, **kwargs: Any) -> dict[str, Any]:
         """
         Get detailed response data for a specific network request.
 
@@ -115,6 +114,7 @@ def register_network_tools(mcp: FastMCP) -> None:
             Detailed response data including body content
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "Network.getResponseBody", {"requestId": request_id}
             )

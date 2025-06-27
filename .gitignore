@@ -75,3 +75,11 @@ logs/
 
 # Chrome debugging
 chrome-debug-*
+
+# Built packages
+*.dxt
+chrome-devtools-protocol-*.dxt
+
+# Documentation artifacts  
+CLAUDE.md
+.claude/

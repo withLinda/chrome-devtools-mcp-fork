@@ -90,7 +90,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_computed_styles(cdp_client: Any, node_id: int) -> dict[str, Any]:
+    async def get_computed_styles(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """Retrieve computed CSS styles for a DOM element.
 
         Calculates and returns all computed CSS properties for the specified DOM element.
@@ -118,6 +118,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             inheritance, and browser-specific calculations.
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "CSS.getComputedStyleForNode", {"nodeId": node_id}
             )
@@ -136,7 +137,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_inline_styles(cdp_client: Any, node_id: int) -> dict[str, Any]:
+    async def get_inline_styles(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get inline CSS styles for a DOM element.
 
@@ -147,6 +148,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             Inline styles and attribute-based styles
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "CSS.getInlineStylesForNode", {"nodeId": node_id}
             )
@@ -178,7 +180,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_matched_styles(cdp_client: Any, node_id: int) -> dict[str, Any]:
+    async def get_matched_styles(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get comprehensive style information including all CSS rules matching a DOM element.
 
@@ -189,6 +191,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             Complete style analysis including cascade, inheritance, and pseudo-elements
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "CSS.getMatchedStylesForNode", {"nodeId": node_id}
             )
@@ -261,9 +264,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_stylesheet_text(
-        cdp_client: Any, stylesheet_id: str
-    ) -> dict[str, Any]:
+    async def get_stylesheet_text(stylesheet_id: str, **kwargs: Any) -> dict[str, Any]:
         """
         Get the textual content of a CSS stylesheet.
 
@@ -274,6 +275,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             Full text content of the stylesheet
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "CSS.getStyleSheetText", {"styleSheetId": stylesheet_id}
             )
@@ -294,9 +296,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_background_colors(
-        cdp_client: Any, node_id: int
-    ) -> dict[str, Any]:
+    async def get_background_colors(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get background colors and font information for a DOM element.
 
@@ -307,6 +307,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             Background colors, computed font size, and font weight
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("CSS.getBackgroundColors", {"nodeId": node_id})
 
             return create_success_response(
@@ -325,7 +326,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_platform_fonts(cdp_client: Any, node_id: int) -> dict[str, Any]:
+    async def get_platform_fonts(node_id: int, **kwargs: Any) -> dict[str, Any]:
         """
         Get platform font usage information for a DOM element.
 
@@ -336,6 +337,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             Information about platform fonts used to render text nodes
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "CSS.getPlatformFontsForNode", {"nodeId": node_id}
             )
@@ -368,7 +370,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_media_queries(cdp_client: Any) -> dict[str, Any]:
+    async def get_media_queries(**kwargs: Any) -> dict[str, Any]:
         """
         Get all media queries parsed by the rendering engine.
 
@@ -376,6 +378,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             List of all active media queries
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("CSS.getMediaQueries")
 
             medias = result.get("medias", [])
@@ -407,9 +410,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def collect_css_class_names(
-        cdp_client: Any, stylesheet_id: str
-    ) -> dict[str, Any]:
+    async def collect_css_class_names(stylesheet_id: str, **kwargs: Any) -> dict[str, Any]:
         """
         Collect all class names from a specified stylesheet.
 
@@ -420,6 +421,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             List of all CSS class names found in the stylesheet
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command(
                 "CSS.collectClassNames", {"styleSheetId": stylesheet_id}
             )
@@ -440,7 +442,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def start_css_coverage_tracking(cdp_client: Any) -> dict[str, Any]:
+    async def start_css_coverage_tracking(**kwargs: Any) -> dict[str, Any]:
         """
         Start tracking CSS rule usage for coverage analysis.
 
@@ -448,6 +450,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             Status of coverage tracking initialization
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             await cdp_client.send_command("CSS.startRuleUsageTracking")
 
             return create_success_response(
@@ -459,7 +462,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def stop_css_coverage_tracking(cdp_client: Any) -> dict[str, Any]:
+    async def stop_css_coverage_tracking(**kwargs: Any) -> dict[str, Any]:
         """
         Stop tracking CSS rule usage and get coverage results.
 
@@ -467,6 +470,7 @@ def register_css_tools(mcp: FastMCP) -> None:
             CSS usage analysis with covered and uncovered rules
         """
         try:
+            cdp_client = kwargs["cdp_client"]
             result = await cdp_client.send_command("CSS.stopRuleUsageTracking")
 
             rule_usage = result.get("ruleUsage", [])
