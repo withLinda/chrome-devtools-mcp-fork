@@ -36,7 +36,7 @@ from .tools.utils import create_error_response
 F = TypeVar("F", bound=Callable[..., Awaitable[Any]])
 
 
-def require_cdp_client(func: F) -> F:
+def require_cdp_client(func: F) -> Callable[..., Awaitable[Any]]:
     """
     Decorator that provides CDP client to tool functions with automatic validation.
 
@@ -95,7 +95,7 @@ def require_cdp_client(func: F) -> F:
         except Exception as e:
             return create_error_response(f"CDP context error: {str(e)}")
 
-    return wrapper
+    return wrapper  # type: ignore[return-value]
 
 
 class CDPContext:
@@ -117,9 +117,9 @@ class CDPContext:
 
     def __init__(self) -> None:
         """Initialise the CDP context manager."""
-        self.cdp_client = None
+        self.cdp_client: Any = None
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Any:
         """
         Enter the async context and validate CDP client.
 
@@ -145,7 +145,7 @@ class CDPContext:
         except ImportError as e:
             raise RuntimeError("CDP client module not available.") from e
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """
         Exit the async context.
 
@@ -155,7 +155,7 @@ class CDPContext:
         pass
 
 
-def get_cdp_client():
+def get_cdp_client() -> Any:
     """
     Get the current CDP client instance without validation.
 

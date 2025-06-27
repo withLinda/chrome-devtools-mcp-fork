@@ -43,12 +43,15 @@ Note:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from mcp.server.fastmcp import FastMCP
 
 from ..cdp_context import require_cdp_client
 from .utils import create_error_response, create_success_response
+
+if TYPE_CHECKING:
+    from ..main import ChromeDevToolsClient
 
 
 def register_css_tools(mcp: FastMCP) -> None:
@@ -90,7 +93,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_computed_styles(cdp_client, node_id: int) -> dict[str, Any]:
+    async def get_computed_styles(cdp_client: ChromeDevToolsClient, node_id: int) -> dict[str, Any]:
         """Retrieve computed CSS styles for a DOM element.
 
         Calculates and returns all computed CSS properties for the specified DOM element.
@@ -136,7 +139,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_inline_styles(cdp_client, node_id: int) -> dict[str, Any]:
+    async def get_inline_styles(cdp_client: ChromeDevToolsClient, node_id: int) -> dict[str, Any]:
         """
         Get inline CSS styles for a DOM element.
 
@@ -178,7 +181,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_matched_styles(cdp_client, node_id: int) -> dict[str, Any]:
+    async def get_matched_styles(cdp_client: ChromeDevToolsClient, node_id: int) -> dict[str, Any]:
         """
         Get comprehensive style information including all CSS rules matching a DOM element.
 
@@ -261,7 +264,9 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_stylesheet_text(cdp_client, stylesheet_id: str) -> dict[str, Any]:
+    async def get_stylesheet_text(
+        cdp_client: ChromeDevToolsClient, stylesheet_id: str
+    ) -> dict[str, Any]:
         """
         Get the textual content of a CSS stylesheet.
 
@@ -292,7 +297,9 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_background_colors(cdp_client, node_id: int) -> dict[str, Any]:
+    async def get_background_colors(
+        cdp_client: ChromeDevToolsClient, node_id: int
+    ) -> dict[str, Any]:
         """
         Get background colors and font information for a DOM element.
 
@@ -321,7 +328,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_platform_fonts(cdp_client, node_id: int) -> dict[str, Any]:
+    async def get_platform_fonts(cdp_client: ChromeDevToolsClient, node_id: int) -> dict[str, Any]:
         """
         Get platform font usage information for a DOM element.
 
@@ -364,7 +371,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def get_media_queries(cdp_client) -> dict[str, Any]:
+    async def get_media_queries(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
         """
         Get all media queries parsed by the rendering engine.
 
@@ -403,7 +410,9 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def collect_css_class_names(cdp_client, stylesheet_id: str) -> dict[str, Any]:
+    async def collect_css_class_names(
+        cdp_client: ChromeDevToolsClient, stylesheet_id: str
+    ) -> dict[str, Any]:
         """
         Collect all class names from a specified stylesheet.
 
@@ -434,7 +443,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def start_css_coverage_tracking(cdp_client) -> dict[str, Any]:
+    async def start_css_coverage_tracking(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
         """
         Start tracking CSS rule usage for coverage analysis.
 
@@ -453,7 +462,7 @@ def register_css_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def stop_css_coverage_tracking(cdp_client) -> dict[str, Any]:
+    async def stop_css_coverage_tracking(cdp_client: ChromeDevToolsClient) -> dict[str, Any]:
         """
         Stop tracking CSS rule usage and get coverage results.
 
