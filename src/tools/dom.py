@@ -22,17 +22,17 @@ Key Features:
 
 Example:
     Inspecting and interacting with DOM elements:
-    
+
     ```python
     # Get document structure
     document = await get_document(depth=2, pierce=True)
-    
+
     # Find elements by CSS selector
     buttons = await query_selector_all(node_id=1, selector='button.primary')
-    
+
     # Inspect element properties
     attrs = await get_element_attributes(node_id=123)
-    
+
     # Get layout information
     box_model = await get_element_box_model(node_id=123)
     ```
@@ -54,11 +54,11 @@ from .utils import create_error_response, create_success_response
 
 def register_dom_tools(mcp: FastMCP) -> None:
     """Register comprehensive DOM inspection and manipulation tools with the MCP server.
-    
+
     Adds all DOM analysis and interaction functions as MCP tools, providing complete
     document object model access, element querying, and structural analysis capabilities.
     Each tool includes robust error handling and detailed response formatting.
-    
+
     The registered tools support the full DOM development workflow:
     - Document structure analysis and navigation
     - Element discovery through CSS selectors and text search
@@ -70,7 +70,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
     Args:
         mcp: FastMCP server instance to register tools with. Must be properly
              initialised before calling this function.
-             
+
     Registered Tools:
         - get_document: Document structure retrieval with depth control
         - query_selector: Single element CSS selector querying
@@ -82,7 +82,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
         - get_element_at_position: Position-based element discovery
         - search_elements: Text-based element searching
         - focus_element: Element focus management
-        
+
     Note:
         All tools require access to the global CDP client instance and active
         browser connection with DOM domain enabled. Node IDs are session-specific
@@ -97,7 +97,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
         Fetches the document tree starting from the root element, with control over
         traversal depth and shadow DOM boundary crossing. This provides the foundation
         for all DOM inspection operations by establishing the document structure.
-        
+
         The depth parameter controls how deep into the DOM tree to traverse, while
         the pierce option enables inspection of shadow DOM content that would normally
         be encapsulated.
@@ -115,7 +115,7 @@ def register_dom_tools(mcp: FastMCP) -> None:
             - message: Summary of document structure retrieved
             - data: Complete DOM tree structure from the document root,
                    including all child elements up to the specified depth
-                   
+
         Note:
             Large documents with high depth settings may produce substantial responses.
             Consider using moderate depths for initial exploration, then targeting

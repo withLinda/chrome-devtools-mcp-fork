@@ -20,11 +20,11 @@ providing error handling and response formatting.
 
 Example:
     Basic usage pattern for tool registration:
-    
+
     ```python
     from mcp.server.fastmcp import FastMCP
     from .chrome_management import register_chrome_tools
-    
+
     mcp = FastMCP("devtools-server")
     register_chrome_tools(mcp)
     ```

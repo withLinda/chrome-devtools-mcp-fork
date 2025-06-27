@@ -21,14 +21,14 @@ Key Features:
 
 Example:
     Analysing element styles and CSS coverage:
-    
+
     ```python
     # Get computed styles for an element
     styles = await get_computed_styles(node_id=123)
-    
+
     # Analyse CSS rule matching
     rules = await get_matched_styles(node_id=123)
-    
+
     # Track CSS coverage for optimisation
     await start_css_coverage_tracking()
     # ... user interactions ...
@@ -53,11 +53,11 @@ from .utils import create_error_response, create_success_response
 
 def register_css_tools(mcp: FastMCP) -> None:
     """Register comprehensive CSS analysis tools with the MCP server.
-    
+
     Adds all CSS inspection and analysis functions as MCP tools, providing complete
     stylesheet analysis, style computation, and CSS debugging capabilities. Each tool
     includes robust error handling and detailed response formatting.
-    
+
     The registered tools support the full CSS development workflow:
     - Style computation and property analysis
     - CSS rule matching and cascade inspection
@@ -69,7 +69,7 @@ def register_css_tools(mcp: FastMCP) -> None:
     Args:
         mcp: FastMCP server instance to register tools with. Must be properly
              initialised before calling this function.
-             
+
     Registered Tools:
         - get_computed_styles: Complete computed CSS properties
         - get_inline_styles: Inline and attribute-based styles
@@ -81,7 +81,7 @@ def register_css_tools(mcp: FastMCP) -> None:
         - collect_css_class_names: Class name collection
         - start_css_coverage_tracking: Coverage analysis initiation
         - stop_css_coverage_tracking: Coverage results and analysis
-        
+
     Note:
         All tools require access to the global CDP client instance and active
         browser connection with CSS domain enabled. Tools will return appropriate
@@ -96,7 +96,7 @@ def register_css_tools(mcp: FastMCP) -> None:
         Calculates and returns all computed CSS properties for the specified DOM element.
         This includes styles from all sources (stylesheets, inline styles, user agent styles)
         after CSS cascade resolution, inheritance, and computation of values.
-        
+
         The computed styles represent the final values that the browser uses for rendering,
         taking into account all CSS rules, inheritance, and default values.
 
@@ -112,7 +112,7 @@ def register_css_tools(mcp: FastMCP) -> None:
                 - nodeId: The target element's node ID
                 - styles: Dictionary of CSS property names to computed values
                 - totalProperties: Count of computed CSS properties
-                
+
         Note:
             Computed values may differ from authored values due to CSS processing,
             inheritance, and browser-specific calculations.

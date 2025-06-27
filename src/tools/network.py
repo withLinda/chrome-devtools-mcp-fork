@@ -13,17 +13,17 @@ Key Features:
 
 Example:
     Monitoring network requests and analyzing responses:
-    
+
     ```python
     # Get all network requests
     requests = await get_network_requests()
-    
+
     # Filter requests by domain
     api_requests = await get_network_requests(filter_domain='api.example.com')
-    
+
     # Get failed requests only
     errors = await get_network_requests(filter_status=404, limit=10)
-    
+
     # Get detailed response data
     response = await get_network_response(request_id='12345')
     ```
@@ -45,7 +45,10 @@ def register_network_tools(mcp: FastMCP) -> None:
     @mcp.tool()
     @require_cdp_client
     async def get_network_requests(
-        cdp_client, filter_domain: str | None = None, filter_status: int | None = None, limit: int | None = None
+        cdp_client,
+        filter_domain: str | None = None,
+        filter_status: int | None = None,
+        limit: int | None = None,
     ) -> dict[str, Any]:
         """
         Get captured network requests with optional filtering.

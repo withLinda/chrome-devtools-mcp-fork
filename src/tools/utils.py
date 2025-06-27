@@ -13,20 +13,20 @@ Key Features:
 
 Example:
     Using utility functions in tool implementations:
-    
+
     ```python
     # Create standardized responses
     success = create_success_response(
         message="Element found",
         data={"nodeId": 123, "tagName": "div"}
     )
-    
+
     # Handle errors consistently
     error = create_error_response(
         error="Element not found",
         details="No element matches selector '.missing'"
     )
-    
+
     # Convert Chrome timestamps
     python_time = safe_timestamp_conversion(chrome_timestamp)
     ```

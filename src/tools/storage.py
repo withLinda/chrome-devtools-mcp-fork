@@ -14,19 +14,19 @@ Key Features:
 
 Example:
     Managing browser storage and cookies:
-    
+
     ```python
     # Check storage usage for an origin
     usage = await get_storage_usage_and_quota('https://example.com')
-    
+
     # Clear specific storage types
     await clear_storage_for_origin('https://example.com', 'cookies,local_storage')
-    
+
     # Manage cookies
     cookies = await get_all_cookies()
     await set_cookie(name='session', value='abc123', domain='.example.com')
     await clear_all_cookies()
-    
+
     # Track storage changes
     await track_indexeddb('https://example.com', enable=True)
     await override_storage_quota('https://example.com', quota_size_mb=100)
@@ -93,7 +93,9 @@ def register_storage_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     @require_cdp_client
-    async def clear_storage_for_origin(cdp_client, origin: str, storage_types: str = "all") -> dict[str, Any]:
+    async def clear_storage_for_origin(
+        cdp_client, origin: str, storage_types: str = "all"
+    ) -> dict[str, Any]:
         """
         Clear storage data for a specific origin.
 

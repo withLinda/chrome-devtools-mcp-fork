@@ -18,11 +18,11 @@ Key Features:
 
 Example:
     Starting Chrome and connecting to a website:
-    
+
     ```python
     # Start Chrome with remote debugging
     result = await start_chrome(port=9222, headless=False)
-    
+
     # Navigate to a specific URL
     if result['success']:
         await navigate_to_url('https://example.com')
@@ -49,7 +49,7 @@ def get_chrome_executable_path(custom_path: str | None = None) -> str | None:
 
     Searches for Chrome or Chromium executables using platform-specific default locations.
     Supports custom paths via parameter or CHROME_PATH environment variable.
-    
+
     The function prioritises custom paths, then checks standard installation directories
     for each operating system. On macOS, it looks in Applications; on Windows, it checks
     Program Files and user-specific locations; on Linux, it examines common binary paths.
@@ -61,10 +61,10 @@ def get_chrome_executable_path(custom_path: str | None = None) -> str | None:
     Returns:
         Absolute path to Chrome executable if found, None if no valid executable
         is located on the system.
-        
+
     Environment Variables:
         CHROME_PATH: Alternative to custom_path parameter for specifying Chrome location.
-        
+
     Note:
         The function validates that the executable file actually exists before returning
         the path, ensuring reliable browser startup.
@@ -112,7 +112,7 @@ def get_chrome_executable_path(custom_path: str | None = None) -> str | None:
 
 async def check_chrome_running(port: int) -> bool:
     """Verify Chrome remote debugging availability on specified port.
-    
+
     Performs a lightweight HTTP request to Chrome's debugging endpoint to confirm
     that the browser is running and accepting DevTools Protocol connections.
     Uses a short timeout to avoid blocking operations.
@@ -124,7 +124,7 @@ async def check_chrome_running(port: int) -> bool:
     Returns:
         True if Chrome is running and responding to debugging requests on the port,
         False if the connection fails, times out, or returns an error status.
-        
+
     Note:
         This function uses a 2-second timeout to balance responsiveness with
         network reliability. Connection failures are silently handled and
@@ -140,21 +140,21 @@ async def check_chrome_running(port: int) -> bool:
 
 def register_chrome_tools(mcp: FastMCP) -> None:
     """Register comprehensive Chrome management tools with the MCP server.
-    
+
     Adds all Chrome lifecycle management functions as MCP tools, including browser
     startup, connection management, navigation, and status monitoring. Each tool
     provides detailed error handling and standardised response formatting.
-    
+
     The registered tools support the complete Chrome automation workflow:
     - Browser discovery and startup with configurable options
-    - Connection establishment and session management  
+    - Connection establishment and session management
     - URL navigation and page control
     - Status monitoring and disconnection handling
 
     Args:
         mcp: FastMCP server instance to register tools with. Must be properly
              initialised before calling this function.
-             
+
     Registered Tools:
         - start_chrome: Launch Chrome with debugging enabled
         - start_chrome_and_connect: Combined startup and connection
@@ -162,7 +162,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         - navigate_to_url: Navigate to specific URLs
         - disconnect_from_browser: Clean session termination
         - get_connection_status: Status monitoring and diagnostics
-        
+
     Note:
         All tools require access to the global CDP client instance for operation.
         Tools will return appropriate error responses if the client is unavailable.
@@ -182,7 +182,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         Supports both headless and windowed modes, with automatic executable detection
         across platforms. Can optionally connect to the started instance and navigate
         to a specific URL in a single operation.
-        
+
         The function handles existing Chrome instances gracefully, detecting if Chrome
         is already running on the target port and optionally connecting to it rather
         than attempting to start a new instance.
@@ -209,11 +209,11 @@ def register_chrome_tools(mcp: FastMCP) -> None:
                 - connected: Whether connection was established
                 - navigated: Whether URL navigation succeeded
                 - alreadyRunning: Whether Chrome was already running
-                
+
         Raises:
             The function handles exceptions internally and returns error responses
             rather than raising exceptions. Check the 'success' field in the response.
-            
+
         Note:
             Uses a temporary user data directory to avoid conflicts with existing
             Chrome profiles. The directory location is platform-specific.
@@ -356,7 +356,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         Convenience function that combines browser startup, connection establishment,
         and navigation into a single operation. Equivalent to calling start_chrome
         with auto_connect=True and a URL parameter.
-        
+
         This function is ideal for quick browser automation tasks where you need
         to get Chrome running and navigate to a specific page without manual
         connection management.
@@ -374,7 +374,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         Returns:
             Combined status dictionary containing startup, connection, and navigation
             results. Includes all fields from start_chrome plus navigation status.
-            
+
         Note:
             This is a convenience wrapper around start_chrome with auto_connect=True.
             For more granular control over the startup process, use start_chrome directly.
@@ -391,7 +391,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         Establishes a connection to a Chrome browser that's already running with
         remote debugging enabled on the specified port. Enables necessary DevTools
         Protocol domains and retrieves browser information.
-        
+
         This function is useful when Chrome is already running (perhaps started
         manually or by another process) and you want to control it programmatically.
         It verifies the browser is accessible before attempting connection.
@@ -409,7 +409,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
                 - connected: Boolean connection status
                 - port: Port Chrome is running on
                 - targetInfo: Browser version and capability information
-                
+
         Note:
             If Chrome is not running on the specified port, the function returns
             an error response with suggestions for starting Chrome with the correct
@@ -465,7 +465,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
             - data: Navigation details including:
                 - url: The URL navigated to
                 - navigated: Boolean navigation status
-                
+
         Note:
             The function returns immediately after initiating navigation and doesn't
             wait for the page to fully load. Use additional tools to monitor page
@@ -489,17 +489,17 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         Cleanly terminates the connection to the Chrome browser instance while
         leaving the browser running. This is useful for releasing resources or
         preparing to connect to a different browser instance.
-        
+
         The browser will continue running after disconnection, but will no longer
         be controllable through this client until a new connection is established.
 
         Returns:
             Disconnection status dictionary containing:
             - success: Boolean indicating disconnection success
-            - message: Human-readable status description  
+            - message: Human-readable status description
             - data: Disconnection details including:
                 - connected: Boolean status (should be False after disconnect)
-                
+
         Note:
             This function only disconnects the client from Chrome; it doesn't
             close or terminate the browser process itself.
@@ -527,7 +527,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
         Retrieves comprehensive information about the current connection state,
         including browser details if connected. This is useful for diagnostics
         and determining whether other operations can be performed.
-        
+
         The function provides different information depending on connection state:
         - If connected: Browser version, target info, and connection details
         - If not connected: Basic status information
@@ -543,7 +543,7 @@ def register_chrome_tools(mcp: FastMCP) -> None:
                 - targetInfo: Browser information (if connected)
                 - host: Chrome host address (if connected)
                 - port: Chrome port number (if connected)
-                
+
         Note:
             This function is safe to call at any time and will not modify the
             connection state, only report it.

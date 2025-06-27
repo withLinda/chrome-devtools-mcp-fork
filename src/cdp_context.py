@@ -15,7 +15,7 @@ The context manager ensures that:
 Example:
     ```python
     from .cdp_context import require_cdp_client
-    
+
     @require_cdp_client
     async def my_tool_function(cdp_client):
         # CDP client is guaranteed to be connected
@@ -39,21 +39,21 @@ F = TypeVar("F", bound=Callable[..., Awaitable[Any]])
 def require_cdp_client(func: F) -> F:
     """
     Decorator that provides CDP client to tool functions with automatic validation.
-    
+
     This decorator eliminates the need for repetitive client access and connection
     checking in every tool function. It automatically:
-    
+
     1. Imports the CDP client from the main module
     2. Validates that the client exists and is connected
     3. Passes the validated client as the first parameter to the decorated function
     4. Returns appropriate error responses if client is unavailable
-    
+
     Args:
         func: The async function to decorate. Must accept cdp_client as first parameter.
-        
+
     Returns:
         The decorated function with automatic CDP client injection.
-        
+
     Example:
         ```python
         @require_cdp_client
@@ -65,47 +65,47 @@ def require_cdp_client(func: F) -> F:
             return {"title": result["result"]["value"]}
         ```
     """
-    
+
     @wraps(func)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
         try:
             # Import CDP client dynamically to avoid circular imports
             from . import main
-            
+
             cdp_client = main.cdp_client
-            
+
             # Validate client availability and connection status
             if not cdp_client:
                 return create_error_response(
                     "CDP client not initialised. Please start Chrome first."
                 )
-            
+
             if not cdp_client.connected:
                 return create_error_response(
                     "Not connected to browser. Please connect to Chrome first."
                 )
-            
+
             # Call the original function with CDP client as first argument
             return await func(cdp_client, *args, **kwargs)
-            
+
         except ImportError:
             return create_error_response(
                 "CDP client module not available. Please check server configuration."
             )
         except Exception as e:
             return create_error_response(f"CDP context error: {str(e)}")
-    
+
     return wrapper
 
 
 class CDPContext:
     """
     Context manager for Chrome DevTools Protocol operations.
-    
+
     Provides a more explicit context-based approach for operations that require
     multiple CDP interactions. This is useful for complex operations that need
     to ensure the connection remains stable throughout the operation.
-    
+
     Example:
         ```python
         async with CDPContext() as cdp:
@@ -114,41 +114,41 @@ class CDPContext:
             result = await cdp.send_command("DOM.getDocument")
         ```
     """
-    
+
     def __init__(self) -> None:
         """Initialise the CDP context manager."""
         self.cdp_client = None
-    
+
     async def __aenter__(self):
         """
         Enter the async context and validate CDP client.
-        
+
         Returns:
             The validated CDP client instance.
-            
+
         Raises:
             RuntimeError: If CDP client is not available or not connected.
         """
         try:
             from . import main
-            
+
             self.cdp_client = main.cdp_client
-            
+
             if not self.cdp_client:
                 raise RuntimeError("CDP client not initialised. Please start Chrome first.")
-            
+
             if not self.cdp_client.connected:
                 raise RuntimeError("Not connected to browser. Please connect to Chrome first.")
-            
+
             return self.cdp_client
-            
+
         except ImportError as e:
             raise RuntimeError("CDP client module not available.") from e
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """
         Exit the async context.
-        
+
         Currently performs no cleanup, but provides a hook for future
         connection management improvements.
         """
@@ -158,14 +158,14 @@ class CDPContext:
 def get_cdp_client():
     """
     Get the current CDP client instance without validation.
-    
+
     This function provides direct access to the CDP client for cases where
     you need to check its status or perform conditional operations based on
     availability.
-    
+
     Returns:
         ChromeDevToolsClient | None: The CDP client instance or None if not available.
-        
+
     Example:
         ```python
         cdp = get_cdp_client()

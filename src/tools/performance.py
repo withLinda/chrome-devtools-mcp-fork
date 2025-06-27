@@ -14,19 +14,19 @@ Key Features:
 
 Example:
     Analyzing page performance and metrics:
-    
+
     ```python
     # Get comprehensive page information
     page_info = await get_page_info()
     # Returns: title, URL, element counts, timing data
-    
+
     # Get detailed performance metrics
     metrics = await get_performance_metrics()
     # Returns: FCP, LCP, CLS, resource timing, memory usage
-    
+
     # Monitor cookies for performance impact
     cookies = await get_cookies(domain='example.com')
-    
+
     # Execute code across all frames
     results = await evaluate_in_all_frames('window.location.href')
     ```

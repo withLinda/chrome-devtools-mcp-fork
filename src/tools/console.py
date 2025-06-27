@@ -19,14 +19,14 @@ Key Features:
 
 Example:
     Executing JavaScript and monitoring console:
-    
+
     ```python
     # Execute JavaScript code
     result = await execute_javascript('console.log("Hello World")')
-    
+
     # Get recent console logs
     logs = await get_console_logs(level='error', limit=10)
-    
+
     # Monitor console for 30 seconds
     monitoring = await monitor_console_live(duration_seconds=30)
     ```
@@ -49,11 +49,11 @@ from .utils import create_error_response, create_success_response, safe_timestam
 
 def register_console_tools(mcp: FastMCP) -> None:
     """Register comprehensive console interaction tools with the MCP server.
-    
+
     Adds all browser console management functions as MCP tools, providing complete
     JavaScript execution capabilities, console monitoring, and debugging support.
     Each tool includes robust error handling and standardised response formatting.
-    
+
     The registered tools support the full range of console operations:
     - Console log retrieval with filtering and categorisation
     - JavaScript code execution with detailed error reporting
@@ -64,7 +64,7 @@ def register_console_tools(mcp: FastMCP) -> None:
     Args:
         mcp: FastMCP server instance to register tools with. Must be properly
              initialised before calling this function.
-             
+
     Registered Tools:
         - get_console_logs: Retrieve and filter console messages
         - get_console_error_summary: Categorised error and warning analysis
@@ -72,7 +72,7 @@ def register_console_tools(mcp: FastMCP) -> None:
         - clear_console: Clear browser console entries
         - inspect_console_object: Detailed object property inspection
         - monitor_console_live: Real-time console monitoring
-        
+
     Note:
         All tools require access to the global CDP client instance and active
         browser connection for operation. Tools will return appropriate error

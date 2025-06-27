@@ -11,7 +11,7 @@ event processing, and command execution through the CDP interface.
 
 The server provides tools for:
 - Browser automation and management
-- Network request monitoring and analysis  
+- Network request monitoring and analysis
 - DOM inspection and manipulation
 - Console log retrieval and filtering
 - Performance metrics collection
@@ -64,18 +64,18 @@ cdp_client: ChromeDevToolsClient | None = None
 class ChromeDevToolsClient:
     """
     Chrome DevTools Protocol client with WebSocket communication capabilities.
-    
+
     This class manages the connection to Chrome's remote debugging interface,
     handles event processing, and executes CDP commands. It maintains state
     for network requests and console logs, and provides a robust interface
     for web application debugging.
-    
+
     The client automatically discovers available Chrome targets and establishes
     WebSocket connections for real-time communication with the browser.
-    
+
     Attributes:
         port: Chrome remote debugging port (default: 9222)
-        host: Hostname for Chrome connection (default: localhost)  
+        host: Hostname for Chrome connection (default: localhost)
         ws: WebSocket connection to Chrome DevTools
         connected: Connection status flag
         message_id: Incremental ID for CDP messages
@@ -88,7 +88,7 @@ class ChromeDevToolsClient:
     def __init__(self, port: int = 9222, host: str = "localhost") -> None:
         """
         Initialise the Chrome DevTools Protocol client.
-        
+
         Args:
             port: Chrome remote debugging port (overridden by CHROME_DEBUG_PORT env var)
             host: Hostname for Chrome connection
@@ -113,14 +113,14 @@ class ChromeDevToolsClient:
     async def connect(self) -> bool:
         """
         Establish connection to Chrome DevTools via WebSocket.
-        
+
         Discovers available Chrome targets and connects to the first available
         target using WebSocket communication. Starts the message handling loop
         for processing incoming CDP events and responses.
-        
+
         Returns:
             bool: True if connection successful, False otherwise
-            
+
         Raises:
             ConnectionError: If no browser targets are available
         """
