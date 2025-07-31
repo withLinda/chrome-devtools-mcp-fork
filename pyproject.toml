@@ -50,10 +50,11 @@ Repository = "https://github.com/withLinda/chrome-devtools-mcp-fork.git"
 Issues = "https://github.com/withLinda/chrome-devtools-mcp-fork/issues"
 
 [project.scripts]
-chrome-devtools-mcp-fork = "src.main:main"
+chrome-devtools-mcp-fork = "main:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+py-modules = ["main", "client", "cdp_context"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

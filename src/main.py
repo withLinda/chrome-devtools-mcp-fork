@@ -28,8 +28,8 @@ import logging
 
 from mcp.server.fastmcp import FastMCP
 
-from .client import ChromeDevToolsClient
-from .tools import (
+from client import ChromeDevToolsClient
+from tools import (
     register_chrome_tools,
     register_console_tools,
     register_css_tools,

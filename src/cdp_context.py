@@ -30,7 +30,7 @@ from collections.abc import Awaitable, Callable
 from functools import wraps
 from typing import Any, TypeVar
 
-from .tools.utils import create_error_response
+from tools.utils import create_error_response
 
 # Type variable for decorated functions
 F = TypeVar("F", bound=Callable[..., Awaitable[Any]])
@@ -71,7 +71,7 @@ def require_cdp_client(func: F) -> Callable[..., Awaitable[Any]]:
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
         try:
             # Import CDP client dynamically to avoid circular imports
-            from . import main
+            import main
 
             cdp_client = main.cdp_client
 
@@ -134,7 +134,7 @@ class CDPContext:
             RuntimeError: If CDP client is not available or not connected.
         """
         try:
-            from . import main
+            import main
 
             self.cdp_client = main.cdp_client
 
@@ -179,7 +179,7 @@ def get_cdp_client() -> Any:
         ```
     """
     try:
-        from . import main
+        import main
 
         return main.cdp_client
     except ImportError:
