@@ -1,0 +1,55 @@
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+.egg-info/
+chrome_devtools_mcp.egg-info/
+build/
+dist/
+
+# Cache directories
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+test_*.py
+*_test.py
+run_tests.py
+test_requirements.txt
+
+# Development files
+.env
+.env.example
+.env.local
+mcp.json
+.claude/
+
+# Documentation
+docs/
+README.md
+
+# Git
+.git/
+.gitignore
+
+# UV lock file (too large for distribution)
+uv.lock
+
+# Development icons
+icon.svg

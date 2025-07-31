@@ -1,0 +1,111 @@
+name: Build Chrome DevTools Extension
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      
+    - name: Install Python dependencies
+      run: uv sync
+      
+    - name: Install DXT packaging tools
+      run: npm install -g @anthropic-ai/dxt
+      
+    - name: Run linting
+      run: uv run ruff check .
+      
+    - name: Run type checking  
+      run: uv run mypy src/
+      
+    - name: Run tests
+      run: uv run python -m pytest test_devtools_server.py -v
+      
+    - name: Package extension
+      run: npx @anthropic-ai/dxt pack
+      
+    - name: Upload extension artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: chrome-devtools-protocol-extension
+        path: chrome-devtools-protocol-*.dxt
+        retention-days: 30
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install DXT packaging tools
+      run: npm install -g @anthropic-ai/dxt
+      
+    - name: Package extension for release
+      run: |
+        VERSION=$(jq -r '.version' manifest.json)
+        npx @anthropic-ai/dxt pack . chrome-devtools-protocol-${VERSION}.dxt
+      
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: chrome-devtools-protocol-*.dxt
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        body: |
+          ## Chrome DevTools Protocol Extension ${{ github.ref_name }}
+          
+          ### Installation
+          1. Download the `.dxt` file from this release
+          2. Open Claude Desktop
+          3. Go to Extensions and install the downloaded file
+          
+          ### Features
+          - Start Chrome with debugging enabled
+          - Monitor network requests and responses
+          - Inspect console logs and errors  
+          - Analyze page performance metrics
+          - Execute JavaScript in browser context
+          - Navigate and control browser programmatically
+          
+          ### Usage
+          After installation, you can use commands like:
+          - `start_chrome_and_connect("localhost:3000")` - Connect to your web app
+          - `get_network_requests()` - View HTTP traffic
+          - `get_console_error_summary()` - Analyze JavaScript errors
+          
+          For full documentation, see the repository README.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

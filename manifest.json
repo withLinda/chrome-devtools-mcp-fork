@@ -1,0 +1,109 @@
+{
+  "dxt_version": "0.1",
+  "name": "chrome-devtools-protocol",
+  "display_name": "Chrome DevTools MCP",
+  "version": "1.0.3",
+  "description": "Chrome DevTools Protocol integration for web application debugging",
+  "long_description": "This extension provides Chrome DevTools Protocol integration through a Python MCP server. It allows Claude to connect to Chrome browsers for debugging web applications, monitoring network requests, inspecting console logs, analyzing performance metrics, and manipulating DOM elements.",
+  "author": {
+    "name": "Benjamin Rowell",
+    "email": "brrowell@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benjaminr/chrome-devtools-mcp"
+  },
+  "icon": "icon.png",
+  "server": {
+    "type": "python",
+    "entry_point": "server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${__dirname}",
+        "python",
+        "${__dirname}/server.py"
+      ],
+      "env": {
+        "CHROME_DEBUG_PORT": "${user_config.chrome_debug_port}",
+        "CHROME_PATH": "${user_config.chrome_path}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "start_chrome",
+      "description": "Start Chrome with remote debugging enabled"
+    },
+    {
+      "name": "connect_to_browser",
+      "description": "Connect to an existing Chrome instance"
+    },
+    {
+      "name": "get_network_requests",
+      "description": "Get captured network requests with filtering"
+    },
+    {
+      "name": "get_console_logs",
+      "description": "Retrieve browser console logs"
+    },
+    {
+      "name": "evaluate_javascript",
+      "description": "Execute JavaScript code in the browser"
+    },
+    {
+      "name": "get_document",
+      "description": "Retrieve DOM document structure"
+    },
+    {
+      "name": "query_selector",
+      "description": "Find DOM elements by CSS selector"
+    },
+    {
+      "name": "get_computed_styles",
+      "description": "Get computed CSS styles for elements"
+    },
+    {
+      "name": "get_performance_metrics",
+      "description": "Get detailed performance metrics"
+    }
+  ],
+  "keywords": [
+    "chrome",
+    "devtools",
+    "debugging",
+    "browser",
+    "network",
+    "console",
+    "performance"
+  ],
+  "license": "MIT",
+  "user_config": {
+    "chrome_debug_port": {
+      "type": "number",
+      "title": "Chrome Debug Port",
+      "description": "Port number for Chrome remote debugging",
+      "default": 9222,
+      "required": false
+    },
+    "chrome_path": {
+      "type": "string",
+      "title": "Chrome Executable Path",
+      "description": "Custom path to Chrome executable (optional - will auto-detect if not provided)",
+      "default": "",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "python": ">=3.10.0"
+    }
+  }
+}
