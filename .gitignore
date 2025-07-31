@@ -82,5 +82,4 @@ chrome-devtools-protocol-*.dxt
 
 # Documentation artifacts  
 CLAUDE.md
-.claude/
-# PyPI MCP Research Publishing Python MCP Servers.md
+.claude

@@ -3,11 +3,11 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "chrome-devtools-mcp"
+name = "chrome-devtools-mcp-fork"
 version = "1.0.0"
 description = "Chrome DevTools Protocol integration for Model Context Protocol"
 authors = [
-    {name = "Benjamin Rowell"}
+    {name = "withLinda13"}
 ]
 license = {text = "MIT"}
 readme = "README.md"
@@ -45,12 +45,18 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/benjaminr/chrome-devtools-mcp"
-Repository = "https://github.com/benjaminr/chrome-devtools-mcp.git"
-Issues = "https://github.com/benjaminr/chrome-devtools-mcp/issues"
+Homepage = "https://github.com/withLinda/chrome-devtools-mcp-fork"
+Repository = "https://github.com/withLinda/chrome-devtools-mcp-fork.git"
+Issues = "https://github.com/withLinda/chrome-devtools-mcp-fork/issues"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src"]
+[project.scripts]
+chrome-devtools-mcp-fork = "src.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.uv]
 dev-dependencies = [

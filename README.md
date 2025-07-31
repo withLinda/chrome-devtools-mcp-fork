@@ -1,8 +1,8 @@
-# Chrome DevTools MCP
+# Chrome DevTools MCP Fork
 
 A Model Context Protocol (MCP) server that provides Chrome DevTools Protocol integration through MCP. This allows you to debug web applications by connecting to Chrome's developer tools.
 
-**Available as a Claude Desktop Extension (.dxt)** for easy one-click installation!
+**Now available on PyPI for easy installation!** Just run `pip install chrome-devtools-mcp-fork`
 
 ## What This Does
 
@@ -26,115 +26,22 @@ This MCP server acts as a bridge between Claude and Chrome's debugging capabilit
 
 ## Installation
 
-### Option 1: Claude Desktop Extension (Easiest)
+### Option 1: PyPI Installation (Recommended)
 
-**Download the pre-built extension:**
-1. Download the latest `.dxt` file from [Releases](https://github.com/benjaminr/chrome-devtools-mcp/releases)
-2. Open Claude Desktop
-3. Go to Extensions and install the downloaded `.dxt` file
-4. Configure Chrome path if needed in extension settings
-
-The extension includes all dependencies and is ready to use immediately!
-
-### Option 2: MCP CLI (Advanced)
-
-**Quick Install (most common):**
+**Simple installation from PyPI:**
 ```bash
-git clone https://github.com/benjaminr/chrome-devtools-mcp.git
-cd chrome-devtools-mcp
-mcp install server.py -n "Chrome DevTools MCP" --with-editable .
+pip install chrome-devtools-mcp-fork
 ```
 
-**All Installation Options:**
-
+**Add to Claude Desktop:**
 ```bash
-# Clone the repository
-git clone https://github.com/benjaminr/chrome-devtools-mcp.git
-cd chrome-devtools-mcp
+# For Claude Code CLI users
+claude mcp add chrome-devtools -s user chrome-devtools-mcp-fork
 
-# The --with-editable flag uses pyproject.toml to install dependencies
-
-# Basic installation with local dependencies
-mcp install server.py --with-editable .
-
-# Install with custom name
-mcp install server.py -n "Chrome DevTools MCP" --with-editable .
-
-# Install with environment variables
-mcp install server.py -n "Chrome DevTools MCP" --with-editable . -v CHROME_DEBUG_PORT=9222
-
-# Install with additional packages if needed
-mcp install server.py -n "Chrome DevTools MCP" --with-editable . --with websockets --with aiohttp
-
-# Install with environment file (copy .env.example to .env first)
-cp .env.example .env
-# Edit .env with your settings
-mcp install server.py -n "Chrome DevTools MCP" --with-editable . -f .env
+# Or add directly to Claude Desktop config
 ```
 
-### Option 3: Claude Code Integration
-
-**For Claude Code CLI users:**
-
-1. **Clone this repository**
-```bash
-git clone https://github.com/benjaminr/chrome-devtools-mcp.git
-cd chrome-devtools-mcp
-```
-
-2. **Install dependencies**
-```bash
-uv sync  # or pip install -r requirements.txt
-```
-
-3. **Add MCP server using Claude CLI**
-
-**Quick setup (recommended):**
-```bash
-# Add the server with environment variable
-claude mcp add chrome-devtools python server.py -e CHROME_DEBUG_PORT=9222
-```
-
-**With custom scope:**
-```bash
-# Add to user scope (available across all projects)
-claude mcp add chrome-devtools python server.py -s user -e CHROME_DEBUG_PORT=9222
-
-# Add to project scope (only for this project)
-claude mcp add chrome-devtools python server.py -s project -e CHROME_DEBUG_PORT=9222
-```
-
-4. **Verify installation**
-```bash
-# List configured MCP servers
-claude mcp list
-
-# Get details about the server
-claude mcp get chrome-devtools
-```
-
-### Option 4: Manual Claude Desktop Setup
-
-1. **Clone this repository**
-```bash
-git clone https://github.com/benjaminr/chrome-devtools-mcp.git
-cd chrome-devtools-mcp
-```
-
-2. **Install dependencies**
-
-**With uv (recommended):**
-```bash
-uv sync
-```
-
-**With pip:**
-```bash
-pip install -r requirements.txt
-```
-
-3. **Add to Claude Desktop configuration**
-
+**Manual Claude Desktop Setup:**
 Edit your Claude Desktop config file:
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
@@ -143,8 +50,7 @@ Edit your Claude Desktop config file:
 {
   "mcpServers": {
     "chrome-devtools": {
-      "command": "python",
-      "args": ["/absolute/path/to/chrome-devtools-mcp/server.py"],
+      "command": "chrome-devtools-mcp-fork",
       "env": {
         "CHROME_DEBUG_PORT": "9222"
       }
@@ -153,7 +59,31 @@ Edit your Claude Desktop config file:
 }
 ```
 
-4. **Restart Claude Desktop**
+### Option 2: Development Installation (Advanced)
+
+**Clone this repository for development:**
+```bash
+git clone https://github.com/withLinda/chrome-devtools-mcp-fork.git
+cd chrome-devtools-mcp-fork
+```
+
+**Install in development mode:**
+```bash
+# With uv (recommended)
+uv sync
+
+# With pip
+pip install -e .
+```
+
+**Add to Claude Code CLI:**
+```bash
+# Using the installed package
+claude mcp add chrome-devtools -s user chrome-devtools-mcp-fork
+
+# Or using local development setup
+claude mcp add chrome-devtools python server.py -s user -e CHROME_DEBUG_PORT=9222
+```
 
 ### Verify Installation
 
@@ -164,8 +94,12 @@ After installation (either method), verify the server is available:
 
 ### Alternative MCP Clients
 
-For other MCP clients, run the server directly:
+For other MCP clients, you can run the server directly:
 ```bash
+# If installed via PyPI
+chrome-devtools-mcp-fork
+
+# Or run from source
 python server.py
 ```
 
@@ -609,15 +543,15 @@ claude mcp add-from-claude-desktop
 
 **With uv (recommended):**
 ```bash
-git clone https://github.com/benjaminr/chrome-devtools-mcp.git
-cd chrome-devtools-mcp
+git clone https://github.com/withLinda/chrome-devtools-mcp-fork.git
+cd chrome-devtools-mcp-fork
 uv sync
 ```
 
 **With pip:**
 ```bash
-git clone https://github.com/benjaminr/chrome-devtools-mcp.git
-cd chrome-devtools-mcp
+git clone https://github.com/withLinda/chrome-devtools-mcp-fork.git
+cd chrome-devtools-mcp-fork
 pip install -e ".[dev]"
 ```
 
