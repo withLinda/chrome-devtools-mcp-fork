@@ -27,6 +27,18 @@ dependencies = [
     "requests>=2.25.0"
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/withLinda/chrome-devtools-mcp-fork"
 "Bug Reports" = "https://github.com/withLinda/chrome-devtools-mcp-fork/issues"
@@ -38,3 +50,11 @@ chrome-devtools-mcp-fork = "chrome_devtools_mcp_fork.main:main"
 [tool.setuptools.packages.find]
 include = ["chrome_devtools_mcp_fork*"]
 exclude = ["tests*"]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
