@@ -29,7 +29,9 @@ jobs:
       uses: astral-sh/setup-uv@v3
       
     - name: Install Python dependencies
-      run: uv sync
+      run: |
+        uv sync
+        uv add pytest pytest-asyncio
       
     - name: Install Chrome
       run: |
@@ -50,8 +52,8 @@ jobs:
     - name: Run type checking  
       run: uv run mypy chrome_devtools_mcp_fork/
       
-    - name: Run tests
-      run: uv run python -m pytest test_devtools_server.py -v
+    - name: Run comprehensive tests
+      run: uv run python -m pytest tests/ -v
       
     - name: Package extension
       run: npx @anthropic-ai/dxt pack

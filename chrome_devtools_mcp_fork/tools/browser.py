@@ -1,8 +1,5 @@
 """Browser management tools for Chrome DevTools MCP"""
 
-import tempfile
-import subprocess
-import platform
 from typing import Dict, Any, Optional
 
 from chrome_devtools_mcp_fork.utils.helpers import create_success_response, create_error_response
@@ -17,6 +14,12 @@ def register_tools(app):
     @app.tool()
     def start_chrome(port: int = 9222, headless: bool = False, chrome_path: Optional[str] = None) -> Dict[str, Any]:
         """Start Chrome with remote debugging enabled."""
+        # Import here to avoid __main__ context issues during tool registration
+        import tempfile
+        import subprocess
+        import platform
+        import time
+        
         try:
             # Determine Chrome path based on platform
             if chrome_path is None:
@@ -49,7 +52,6 @@ def register_tools(app):
                                      stderr=subprocess.DEVNULL)
             
             # Wait a moment for Chrome to start
-            import time
             time.sleep(2)
             
             return create_success_response({
@@ -94,6 +96,9 @@ def register_tools(app):
     @app.tool()
     def start_chrome_and_connect(url: str, port: int = 9222, headless: bool = False) -> Dict[str, Any]:
         """Start Chrome and connect in one operation."""
+        # Import here to avoid __main__ context issues
+        import time
+        
         try:
             # Start Chrome
             start_result = start_chrome(port=port, headless=headless)
@@ -101,7 +106,6 @@ def register_tools(app):
                 return start_result
             
             # Wait for Chrome to be ready
-            import time
             time.sleep(3)
             
             # Connect to Chrome

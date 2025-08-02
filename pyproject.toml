@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "chrome-devtools-mcp-fork"
-version = "2.0.0"
-description = "Chrome DevTools Protocol integration for Model Context Protocol - Clean Architecture"
+version = "2.0.1"
+description = "MCP server for Chrome DevTools integration - enable AI assistants to control browsers for web development debugging"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
