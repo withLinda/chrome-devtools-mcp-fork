@@ -1,6 +1,5 @@
 """Browser management tools for Chrome DevTools MCP"""
 
-import asyncio
 import tempfile
 import subprocess
 import platform

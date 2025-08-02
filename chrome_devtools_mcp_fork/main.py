@@ -6,15 +6,6 @@ Clean architecture with absolute imports only.
 
 import sys
 import logging
-from typing import Dict, Any
-
-# Configure logging for MCP (never write to stdout for STDIO servers)
-logging.basicConfig(
-    level=logging.WARNING,  # Only warnings and errors
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler(sys.stderr)]  # Use stderr, never stdout
-)
-logger = logging.getLogger(__name__)
 
 # Import MCP SDK
 from mcp.server.fastmcp import FastMCP
@@ -27,6 +18,14 @@ from chrome_devtools_mcp_fork.tools import dom
 from chrome_devtools_mcp_fork.tools import network
 from chrome_devtools_mcp_fork.tools import performance
 from chrome_devtools_mcp_fork.tools import storage
+
+# Configure logging for MCP (never write to stdout for STDIO servers)
+logging.basicConfig(
+    level=logging.WARNING,  # Only warnings and errors
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stderr)]  # Use stderr, never stdout
+)
+logger = logging.getLogger(__name__)
 
 # Create FastMCP app instance
 app = FastMCP("chrome-devtools-mcp-fork")
