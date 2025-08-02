@@ -30,11 +30,11 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Import the main function and MCP server object from the modular implementation
-from src import main
-from src.main import mcp
+from chrome_devtools_mcp_fork import main, get_mcp_server
 
 # Export the MCP server object for MCP CLI detection and tooling
+mcp = get_mcp_server()
 __all__ = ["mcp", "main"]
 
 if __name__ == "__main__":
-    main.main()
+    main()
