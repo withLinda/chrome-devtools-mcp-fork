@@ -65,7 +65,7 @@ def test_no_relative_imports():
                                 )
     
     assert not found_relative_imports, (
-        f"Found relative imports:\n" + "\n".join(found_relative_imports)
+        "Found relative imports:\n" + "\n".join(found_relative_imports)
     )
 
 

@@ -5,8 +5,6 @@ import subprocess
 import sys
 import os
 import tempfile
-import shutil
-import json
 
 
 def test_package_metadata():
@@ -17,8 +15,12 @@ def test_package_metadata():
     
     assert os.path.exists(pyproject_path), "pyproject.toml not found"
     
-    # Read pyproject.toml
-    import tomllib
+    # Read pyproject.toml - handle Python 3.10 compatibility
+    try:
+        import tomllib
+    except ImportError:
+        import tomli as tomllib
+    
     with open(pyproject_path, 'rb') as f:
         pyproject = tomllib.load(f)
     
@@ -30,7 +32,7 @@ def test_package_metadata():
     assert project['name'] == 'chrome-devtools-mcp-fork', "Incorrect project name"
     
     assert 'version' in project, "Missing project version"
-    assert project['version'] == '2.0.0', "Version mismatch"
+    assert project['version'] == '2.0.1', "Version mismatch"
     
     assert 'description' in project, "Missing project description"
     assert 'authors' in project, "Missing project authors"
@@ -52,13 +54,17 @@ def test_version_consistency():
     
     # Check __version__ attribute
     assert hasattr(chrome_devtools_mcp_fork, '__version__'), "Missing __version__"
-    assert chrome_devtools_mcp_fork.__version__ == '2.0.0', "Version mismatch in __init__.py"
+    assert chrome_devtools_mcp_fork.__version__ == '2.0.1', "Version mismatch in __init__.py"
     
     # Check against pyproject.toml
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pyproject_path = os.path.join(project_root, 'pyproject.toml')
     
-    import tomllib
+    try:
+        import tomllib
+    except ImportError:
+        import tomli as tomllib
+    
     with open(pyproject_path, 'rb') as f:
         pyproject = tomllib.load(f)
     
@@ -102,9 +108,13 @@ def test_entry_points():
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pyproject_path = os.path.join(project_root, 'pyproject.toml')
     
-    import tomllib
+    try:
+        import tomllib
+    except ImportError:
+        import tomli as tomllib
+    
     with open(pyproject_path, 'rb') as f:
-        pyproject = tomllib.load(f)
+        _ = tomllib.load(f)  # Just verify it loads correctly
     
     # Check for MCP server configuration
     # Note: MCP servers typically don't have console scripts but are run via server.py
@@ -177,7 +187,11 @@ def test_dependency_versions():
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pyproject_path = os.path.join(project_root, 'pyproject.toml')
     
-    import tomllib
+    try:
+        import tomllib
+    except ImportError:
+        import tomli as tomllib
+    
     with open(pyproject_path, 'rb') as f:
         pyproject = tomllib.load(f)
     

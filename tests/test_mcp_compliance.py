@@ -1,11 +1,9 @@
 """Test MCP protocol compliance and standards."""
 
 import pytest
-import asyncio
 import json
 import sys
 from io import StringIO
-from mcp.server.fastmcp import FastMCP
 from chrome_devtools_mcp_fork.main import app
 
 
@@ -16,7 +14,7 @@ async def test_tool_schema_validation():
     
     for tool in tools:
         # Check required attributes
-        assert hasattr(tool, 'name'), f"Tool missing name attribute"
+        assert hasattr(tool, 'name'), "Tool missing name attribute"
         assert hasattr(tool, 'description'), f"Tool {tool.name} missing description"
         assert hasattr(tool, 'inputSchema'), f"Tool {tool.name} missing inputSchema"
         
@@ -53,7 +51,6 @@ def test_stdio_transport_no_stdout():
     
     try:
         # Import should not print to stdout
-        from chrome_devtools_mcp_fork import main
         
         # Get stdout content
         stdout_content = captured_stdout.getvalue()
