@@ -48,7 +48,9 @@ def create_success_response(
     return response
 
 
-def create_error_response(error: str, details: str | None = None, **kwargs: Any) -> dict[str, Any]:
+def create_error_response(
+    error: str, details: str | None = None, **kwargs: Any
+) -> dict[str, Any]:
     """Create a standardised error response."""
     response = {"success": False, "error": error, "timestamp": time.time(), **kwargs}
     if details:

@@ -79,7 +79,9 @@ async def chrome_setup() -> AsyncGenerator[dict[str, Any], None]:
         "--user-data-dir=/tmp/chrome-test-profile",
     ]
 
-    chrome_process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    chrome_process = subprocess.Popen(
+        cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+    )
     await asyncio.sleep(3)
     logger.info(f"Chrome started for testing on port {test_port}")
 
@@ -93,7 +95,9 @@ async def chrome_setup() -> AsyncGenerator[dict[str, Any], None]:
 
 
 @pytest_asyncio.fixture
-async def cdp_client(chrome_setup: dict[str, Any]) -> AsyncGenerator[ChromeDevToolsClient, None]:
+async def cdp_client(
+    chrome_setup: dict[str, Any],
+) -> AsyncGenerator[ChromeDevToolsClient, None]:
     """Create and connect CDP client."""
     test_port = chrome_setup["port"]
     client = ChromeDevToolsClient()
@@ -213,7 +217,9 @@ async def test_element_outer_html(cdp_client: ChromeDevToolsClient) -> None:
             "DOM.getOuterHTML", {"nodeId": element_result["nodeId"]}
         )
         assert "outerHTML" in html_result, "Should return outer HTML"
-        assert "test-element" in html_result["outerHTML"], "HTML should contain element ID"
+        assert "test-element" in html_result["outerHTML"], (
+            "HTML should contain element ID"
+        )
 
 
 @pytest.mark.asyncio
@@ -316,11 +322,14 @@ async def test_storage_operations(cdp_client: ChromeDevToolsClient) -> None:
     """Test storage operations."""
     try:
         # Test storage quota check
-        await cdp_client.send_command("Storage.getUsageAndQuota", {"origin": "http://localhost"})
+        await cdp_client.send_command(
+            "Storage.getUsageAndQuota", {"origin": "http://localhost"}
+        )
 
         # Test storage clearing
         await cdp_client.send_command(
-            "Storage.clearDataForOrigin", {"origin": "http://localhost", "storageTypes": "cookies"}
+            "Storage.clearDataForOrigin",
+            {"origin": "http://localhost", "storageTypes": "cookies"},
         )
 
     except Exception:
@@ -356,12 +365,18 @@ async def test_search_elements(cdp_client: ChromeDevToolsClient) -> None:
         if result_count > 0:
             results = await cdp_client.send_command(
                 "DOM.getSearchResults",
-                {"searchId": search_id, "fromIndex": 0, "toIndex": min(result_count, 10)},
+                {
+                    "searchId": search_id,
+                    "fromIndex": 0,
+                    "toIndex": min(result_count, 10),
+                },
             )
             assert "nodeIds" in results, "Should return search results"
 
         # Cleanup search
-        await cdp_client.send_command("DOM.discardSearchResults", {"searchId": search_id})
+        await cdp_client.send_command(
+            "DOM.discardSearchResults", {"searchId": search_id}
+        )
 
     except Exception:
         # DOM search may not be fully available in all Chrome versions

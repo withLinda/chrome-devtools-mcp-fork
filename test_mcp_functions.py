@@ -8,13 +8,14 @@ import subprocess
 import sys
 import os
 
+
 # Test all 8 functions via subprocess (simulating Claude Code execution)
 def test_mcp_functions():
     """Test MCP function registration in subprocess context."""
-    
+
     # Get project root
     project_root = os.path.dirname(os.path.abspath(__file__))
-    
+
     # Test script that simulates MCP server startup
     test_script = f"""
 import sys
@@ -65,14 +66,12 @@ for tool in tools:
         # Just verify the function exists and is callable
         # The actual function will be wrapped by FastMCP
 """
-    
+
     # Run test in subprocess
     result = subprocess.run(
-        [sys.executable, '-c', test_script],
-        capture_output=True,
-        text=True
+        [sys.executable, "-c", test_script], capture_output=True, text=True
     )
-    
+
     print("=== SUBPROCESS OUTPUT ===")
     print(result.stdout)
     if result.stderr:
@@ -80,7 +79,7 @@ for tool in tools:
         print(result.stderr)
     print("=== RETURN CODE ===")
     print(result.returncode)
-    
+
     return result.returncode == 0
 
 

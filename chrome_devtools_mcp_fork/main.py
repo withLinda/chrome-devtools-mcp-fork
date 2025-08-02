@@ -22,8 +22,8 @@ from chrome_devtools_mcp_fork.tools import storage
 # Configure logging for MCP (never write to stdout for STDIO servers)
 logging.basicConfig(
     level=logging.WARNING,  # Only warnings and errors
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler(sys.stderr)]  # Use stderr, never stdout
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stderr)],  # Use stderr, never stdout
 )
 logger = logging.getLogger(__name__)
 
@@ -39,6 +39,7 @@ network.register_tools(app)
 performance.register_tools(app)
 storage.register_tools(app)
 
+
 def main():
     """Main entry point for the MCP server."""
     try:
@@ -47,6 +48,7 @@ def main():
     except Exception as e:
         logger.error(f"Failed to start MCP server: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
