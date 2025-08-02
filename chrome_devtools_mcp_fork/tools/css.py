@@ -61,7 +61,10 @@ try:
     from .utils import create_error_response, create_success_response
 except ImportError:
     try:
-        from chrome_devtools_mcp_fork.tools.utils import create_error_response, create_success_response
+        from chrome_devtools_mcp_fork.tools.utils import (
+            create_error_response,
+            create_success_response,
+        )
     except ImportError:
         from utils import create_error_response, create_success_response
 

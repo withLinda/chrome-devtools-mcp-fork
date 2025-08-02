@@ -57,7 +57,11 @@ try:
     from .utils import create_error_response, create_success_response, safe_timestamp_conversion
 except ImportError:
     try:
-        from chrome_devtools_mcp_fork.tools.utils import create_error_response, create_success_response, safe_timestamp_conversion
+        from chrome_devtools_mcp_fork.tools.utils import (
+            create_error_response,
+            create_success_response,
+            safe_timestamp_conversion,
+        )
     except ImportError:
         from utils import create_error_response, create_success_response, safe_timestamp_conversion
 
