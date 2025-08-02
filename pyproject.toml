@@ -37,6 +37,7 @@ dev = [
     "pytest-asyncio>=0.23.0",
     "ruff>=0.1.0",
     "mypy>=1.0.0",
+    "types-requests>=2.25.0",
 ]
 
 [project.urls]
@@ -57,4 +58,5 @@ dev-dependencies = [
     "pytest-asyncio>=0.23.0",
     "ruff>=0.1.0",
     "mypy>=1.0.0",
+    "types-requests>=2.25.0",
 ]
