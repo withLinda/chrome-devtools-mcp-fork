@@ -30,7 +30,7 @@ from collections.abc import Awaitable, Callable
 from functools import wraps
 from typing import Any, TypeVar
 
-from tools.utils import create_error_response
+from .tools.utils import create_error_response
 
 # Type variable for decorated functions
 F = TypeVar("F", bound=Callable[..., Awaitable[Any]])
