@@ -48,7 +48,7 @@ jobs:
       run: uv run ruff check .
       
     - name: Run type checking  
-      run: uv run mypy src/
+      run: uv run mypy chrome_devtools_mcp_fork/
       
     - name: Run tests
       run: uv run python -m pytest test_devtools_server.py -v
