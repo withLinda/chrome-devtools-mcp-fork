@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "chrome-devtools-mcp-fork"
-version = "1.0.5"
+version = "1.0.6"
 description = "Chrome DevTools Protocol integration for Model Context Protocol"
 authors = [
     {name = "withLinda13"}

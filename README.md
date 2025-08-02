@@ -26,22 +26,25 @@ This MCP server acts as a bridge between Claude and Chrome's debugging capabilit
 
 ## Installation
 
-### Option 1: PyPI Installation (Recommended)
+### Option 1A: Claude Code CLI (Recommended)
 
-**Simple installation from PyPI:**
+**Install from PyPI and add to Claude Code:**
+```bash
+# Install the package
+pip install chrome-devtools-mcp-fork
+
+# Add to Claude Code CLI
+claude mcp add chrome-devtools -s user chrome-devtools-mcp-fork
+```
+
+### Option 1B: Claude Desktop Manual Setup
+
+**Install from PyPI:**
 ```bash
 pip install chrome-devtools-mcp-fork
 ```
 
-**Add to Claude Desktop:**
-```bash
-# For Claude Code CLI users
-claude mcp add chrome-devtools -s user chrome-devtools-mcp-fork
-
-# Or add directly to Claude Desktop config
-```
-
-**Manual Claude Desktop Setup:**
+**Add to Claude Desktop config:**
 Edit your Claude Desktop config file:
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
@@ -61,34 +64,50 @@ Edit your Claude Desktop config file:
 
 ### Option 2: Development Installation (Advanced)
 
-**Clone this repository for development:**
+**Clone and install for development:**
 ```bash
 git clone https://github.com/withLinda/chrome-devtools-mcp-fork.git
 cd chrome-devtools-mcp-fork
+
+# Install dependencies
+uv sync  # recommended
+# OR: pip install -e .
 ```
 
-**Install in development mode:**
+**Configure with Claude Code CLI:**
 ```bash
-# With uv (recommended)
-uv sync
-
-# With pip
-pip install -e .
-```
-
-**Add to Claude Code CLI:**
-```bash
-# Using the installed package
-claude mcp add chrome-devtools -s user chrome-devtools-mcp-fork
-
-# Or using local development setup
+# Using local development setup
 claude mcp add chrome-devtools python server.py -s user -e CHROME_DEBUG_PORT=9222
+```
+
+**Configure with Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "python",
+      "args": ["/absolute/path/to/chrome-devtools-mcp-fork/server.py"],
+      "env": {
+        "CHROME_DEBUG_PORT": "9222"
+      }
+    }
+  }
+}
 ```
 
 ### Verify Installation
 
-After installation (either method), verify the server is available:
-1. Open Claude Desktop
+**For Claude Code CLI:**
+```bash
+# Check if server is configured
+claude mcp list
+
+# Test server functionality
+# Use any MCP tool in your next Claude Code session
+```
+
+**For Claude Desktop:**
+1. Restart Claude Desktop completely
 2. Look for MCP tools in the conversation
 3. Try a simple command: `get_connection_status()`
 
