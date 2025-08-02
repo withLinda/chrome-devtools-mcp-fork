@@ -21,7 +21,7 @@ import pytest_asyncio
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from src.client import ChromeDevToolsClient
+from chrome_devtools_mcp_fork.client import ChromeDevToolsClient
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
