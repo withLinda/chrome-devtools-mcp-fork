@@ -96,18 +96,17 @@ async def chrome_setup() -> AsyncGenerator[dict[str, Any], None]:
 async def cdp_client(chrome_setup: dict[str, Any]) -> AsyncGenerator[ChromeDevToolsClient, None]:
     """Create and connect CDP client."""
     test_port = chrome_setup["port"]
-    client = ChromeDevToolsClient(port=test_port)
+    client = ChromeDevToolsClient()
 
-    connected = await client.connect()
+    connected = client.connect(test_port)
     if not connected:
         pytest.skip("Failed to connect to Chrome for testing")
 
-    await client.enable_domains()
     logger.info("CDP client connected and ready")
 
     yield client
 
-    await client.disconnect()
+    # No explicit disconnect needed - connection will close automatically
 
 
 async def setup_test_page(cdp_client: ChromeDevToolsClient) -> None:
