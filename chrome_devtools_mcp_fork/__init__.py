@@ -1,32 +1,8 @@
-"""Chrome DevTools MCP Fork Package."""
+"""Chrome DevTools MCP Fork - Clean Architecture Version 2.0"""
 
-__version__ = "1.0.7"
+__version__ = "2.0.0"
 
-# Import main components for easy access
-from .client import ChromeDevToolsClient
-from .main import cdp_client, get_mcp_server, main
+# Import main entry point for programmatic access
+from chrome_devtools_mcp_fork.main import main, app
 
-# Import all tool registration functions
-from .tools import (
-    register_chrome_tools,
-    register_console_tools,
-    register_css_tools,
-    register_dom_tools,
-    register_network_tools,
-    register_performance_tools,
-    register_storage_tools,
-)
-
-__all__ = [
-    "ChromeDevToolsClient",
-    "main",
-    "get_mcp_server",
-    "cdp_client",
-    "register_chrome_tools",
-    "register_console_tools",
-    "register_css_tools",
-    "register_dom_tools",
-    "register_network_tools",
-    "register_performance_tools",
-    "register_storage_tools",
-]
+__all__ = ["main", "app", "__version__"]
